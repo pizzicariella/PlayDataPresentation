@@ -1,8 +1,9 @@
 package controllers
 
-import akka.actor.ActorSystem
+import daos.AnnotatedArticleDao
 import javax.inject._
 import play.api.mvc._
+import play.api.libs.json.Json
 
 import scala.concurrent.ExecutionContext
 
@@ -11,7 +12,9 @@ import scala.concurrent.ExecutionContext
  * application's home page.
  */
 @Singleton
-class HomeController @Inject()(cc: ControllerComponents) extends AbstractController(cc) {
+class HomeController @Inject()(implicit ec: ExecutionContext,
+                               cc: ControllerComponents,
+                               dao: AnnotatedArticleDao) extends AbstractController(cc) {
 
   /**
    * Create an Action to render an HTML page with a welcome message.
@@ -24,7 +27,7 @@ class HomeController @Inject()(cc: ControllerComponents) extends AbstractControl
   }
 
   def corpus = Action {
-    Ok(views.html.corpus())
+    Ok(views.html.corpus("News Corpus"))
   }
 
   def analyze = Action {
@@ -33,6 +36,10 @@ class HomeController @Inject()(cc: ControllerComponents) extends AbstractControl
 
   def info = Action {
     Ok(views.html.info())
+  }
+
+  def getArticles: Action[AnyContent] = Action.async {
+    dao.listArticles().map(articles => Ok(Json.toJson(articles)))
   }
 
 }
