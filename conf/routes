@@ -8,7 +8,7 @@ GET     /                           controllers.HomeController.index
 GET     /corpus                     controllers.HomeController.corpus
 GET     /analyze                    controllers.HomeController.analyze
 GET     /info                       controllers.HomeController.info
-GET     /corpus/articles            controllers.HomeController.getArticles
+GET     /corpus/articles            controllers.AnnotatedArticleController.articleList
 # An example controller showing how to use dependency injection
 GET     /count                      controllers.CountController.count
 # An example controller showing how to write asynchronous code

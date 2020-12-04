@@ -1,13 +1,13 @@
 package entities
 
-import play.api.libs.json.{OFormat, Json}
+import play.api.libs.json.Json
 
-case class AnnotatedArticle(id: String,
+case class AnnotatedArticle(_id: String,
                             longUrl: String,
-                            crawlTime: BigDecimal,
+                            crawlTime: String,
                             text: String,
-                            posAnnos: List[PosAnnotation])
+                            annotationsPos: List[PosAnnotation])
 
 object AnnotatedArticle{
-  implicit val format: OFormat[AnnotatedArticle] = Json.format[AnnotatedArticle]
+  implicit val format = Json.format[AnnotatedArticle]
 }

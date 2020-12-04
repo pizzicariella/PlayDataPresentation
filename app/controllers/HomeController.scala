@@ -1,9 +1,7 @@
 package controllers
 
-import daos.AnnotatedArticleDao
 import javax.inject._
 import play.api.mvc._
-import play.api.libs.json.Json
 
 import scala.concurrent.ExecutionContext
 
@@ -13,8 +11,7 @@ import scala.concurrent.ExecutionContext
  */
 @Singleton
 class HomeController @Inject()(implicit ec: ExecutionContext,
-                               cc: ControllerComponents,
-                               dao: AnnotatedArticleDao) extends AbstractController(cc) {
+                               cc: ControllerComponents) extends AbstractController(cc) {
 
   /**
    * Create an Action to render an HTML page with a welcome message.
@@ -37,9 +34,4 @@ class HomeController @Inject()(implicit ec: ExecutionContext,
   def info = Action {
     Ok(views.html.info())
   }
-
-  def getArticles: Action[AnyContent] = Action.async {
-    dao.listArticles().map(articles => Ok(Json.toJson(articles)))
-  }
-
 }
