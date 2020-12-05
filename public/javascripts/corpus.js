@@ -1,27 +1,23 @@
+$(document).ready(function () {
+    jsRoutes.controllers.AnnotatedArticleController.articleList().ajax({
+        success: function (result){
+            result.forEach(article => createAnnotatedArticle(article))
+        },
+        failure: function (err){
+            console.log("there was an error")
+        }
+    });
+});
 
-const getAllAnnotatedArticles = async () => {
-    const result = await fetch('http://localhost:9000/corpus/articles');
-    return result.json();
-};
 
 const createAnnotatedArticle = (articleInfo) => {
-    const {id, longUrl, crawlTime, text, posAnnos} = articleInfo;
+    const {_id, longUrl, crawlTime, text, annotationsPos} = articleInfo;
     const articleTemplate = document.getElementById("articleTemplate").content;
     const article = articleTemplate.cloneNode(true);
     const articleText = article.getElementById("articleText");
-    // richtig?
     articleText.innerText = text
     //TODO add other attribs like longUrl
     document.getElementById("articleTab").appendChild(article)
 }
 
-const addArticlesToView = (articles) => {
-    articles.forEach(article => createAnnotatedArticle(article))
-}
-
-const insertArticles = () => {
-    getAllAnnotatedArticles().then(articles => addArticlesToView(articles))
-}
-
-console.log("running")
-insertArticles()
+console.log("running");

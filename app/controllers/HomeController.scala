@@ -2,6 +2,8 @@ package controllers
 
 import javax.inject._
 import play.api.mvc._
+import play.api.routing.JavaScriptReverseRouter
+import play.mvc.Http.MimeTypes
 
 import scala.concurrent.ExecutionContext
 
@@ -23,7 +25,7 @@ class HomeController @Inject()(implicit ec: ExecutionContext,
     Ok(views.html.index())
   }
 
-  def corpus = Action {
+  def corpus = Action { implicit request =>
     Ok(views.html.corpus("News Corpus"))
   }
 
@@ -34,4 +36,5 @@ class HomeController @Inject()(implicit ec: ExecutionContext,
   def info = Action {
     Ok(views.html.info())
   }
+
 }

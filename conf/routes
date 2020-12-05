@@ -9,6 +9,8 @@ GET     /corpus                     controllers.HomeController.corpus
 GET     /analyze                    controllers.HomeController.analyze
 GET     /info                       controllers.HomeController.info
 GET     /corpus/articles            controllers.AnnotatedArticleController.articleList
+# Javascript routing
+GET     /jsRoutes                   controllers.AnnotatedArticleController.jsRoutes
 # An example controller showing how to use dependency injection
 GET     /count                      controllers.CountController.count
 # An example controller showing how to write asynchronous code
