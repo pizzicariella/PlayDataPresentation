@@ -1,13 +1,29 @@
+let loadedArticles = []
+
 $(document).ready(function () {
-    jsRoutes.controllers.AnnotatedArticleController.articleList().ajax({
+    jsRoutes.controllers.AnnotatedArticleController.inMemoryArticleList().ajax({
         success: function (result){
-            result.forEach(article => createAnnotatedArticle(article))
+            loadedArticles = result
+            result.forEach(article => insertArticle(article))
         },
         failure: function (err){
             console.log("there was an error")
         }
     });
 });
+
+function showPosAnnotations(articleId) {
+    const articleInfo = loadedArticles.find(article => article._id === articleId)
+    const {_id, longUrl, crawlTime, text, annotationsPos} = articleInfo;
+    const completeTextAnnotated = completeAnnotations(annotationsPos, text.length)
+    const wordSpans = completeTextAnnotated.map(pos => convertPosAnnotationToWordSpan(pos, text));
+    const article = document.getElementById(articleId)
+    const articleText = article.querySelector("#articleText")
+    articleText.innerText = ""
+    for(let i = 0; i<wordSpans.length; i++){
+        articleText.appendChild(wordSpans[i])
+    }
+}
 
 const convertPosAnnotationToWordSpan = (annotation, text) => {
     const {begin, end, tag} = annotation;
@@ -34,7 +50,7 @@ const convertPosAnnotationToWordSpan = (annotation, text) => {
     return wordSpan;
 }
 
-function completeAnnotations(annotations) {
+function completeAnnotations(annotations, textLength) {
     let completeAnnos = [];
     for(let i=0; i<annotations.length; i++){
         completeAnnos.push(annotations[i])
@@ -46,19 +62,25 @@ function completeAnnotations(annotations) {
                 const empyAnno = {begin: endPrev+1, end: begin-1, tag: "empy"}
                 completeAnnos.push(empyAnno)
             }
+        } else {
+            if(textLength-1 > endPrev){
+                const empyAnno = {begin: endPrev+1, end: textLength-1, tag: "empy"}
+                completeAnnos.push(empyAnno)
+            }
         }
     }
     return completeAnnos
 }
 
-const createAnnotatedArticle = (articleInfo) => {
+const insertArticle = (articleInfo) => {
     const {_id, longUrl, crawlTime, text, annotationsPos} = articleInfo;
-    //const completeTextAnnotated = completeAnnotations(annotationsPos)
-    //const wordSpans = completeTextAnnotated.map(pos => convertPosAnnotationToWordSpan(pos, text));
+
     const textAttribs = text.split("$§$");
 
     const articleTemplate = document.getElementById("articleTemplate").content;
     const article = articleTemplate.cloneNode(true);
+    const articleElement = article.getElementById("setToArticleId")
+    articleElement.id = _id
 
     const articleTitle = article.getElementById("articleTitle");
     articleTitle.innerText = textAttribs[0];
@@ -67,10 +89,10 @@ const createAnnotatedArticle = (articleInfo) => {
     articleIntro.innerText = textAttribs[1];
 
     const articleText = article.getElementById("articleText");
-    for(let i = 0; i<wordSpans.length; i++){
+    /*for(let i = 0; i<wordSpans.length; i++){
         articleText.appendChild(wordSpans[i])
-    }
-    //articleText.innerText = textAttribs[2];
+    }*/
+    articleText.innerText = textAttribs[2];
 
     const articleReference = article.getElementById("articleReference");
     const link = document.createElement('a');
@@ -85,6 +107,9 @@ const createAnnotatedArticle = (articleInfo) => {
     articleReference.appendChild(sourceSpan);
     articleReference.appendChild(link);
     articleReference.appendChild(dateSpan);
+
+    const button = article.getElementById("showAnnotationsButton");
+    button.onclick = function () {showPosAnnotations(_id)}
 
     document.getElementById("articleTab").appendChild(article);
 }

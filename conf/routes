@@ -9,6 +9,7 @@ GET     /corpus                     controllers.HomeController.corpus
 GET     /analyze                    controllers.HomeController.analyze
 GET     /info                       controllers.HomeController.info
 GET     /corpus/articles            controllers.AnnotatedArticleController.articleList
+GET     /corpus/test/articles       controllers.AnnotatedArticleController.inMemoryArticleList
 # Javascript routing
 GET     /jsRoutes                   controllers.AnnotatedArticleController.jsRoutes
 # An example controller showing how to use dependency injection
