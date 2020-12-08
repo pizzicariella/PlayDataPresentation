@@ -1,4 +1,8 @@
-let loadedArticles = []
+let loadedArticles = [];
+const tagDescriptions = {ADJ: "Adjektiv", ADP: "Präposition", ADV: "Adverb", AUX: "Hilfsverb",
+    CCONJ: "Konjunktion (koordinierend)", DET: "Artikel", INTJ: "Interjektion", NOUN: "Nomen", NUM: "Zahlwort",
+    PART: "Partikel", PRON: "Pronomen", PROPN: "Eigenname", PUNCT: "Punctuation", SCONJ: "Konjunktion (subordinierend)",
+    VERB: "Verb", X: "sonstige Wortart"};
 
 $(document).ready(function () {
     jsRoutes.controllers.AnnotatedArticleController.inMemoryArticleList().ajax({
@@ -13,22 +17,83 @@ $(document).ready(function () {
 });
 
 function showPosAnnotations(articleId) {
-    const articleInfo = loadedArticles.find(article => article._id === articleId)
+    const articleInfo = loadedArticles.find(article => article._id === articleId);
     const {_id, longUrl, crawlTime, text, annotationsPos} = articleInfo;
-    const completeTextAnnotated = completeAnnotations(annotationsPos, text.length)
-    const wordSpans = completeTextAnnotated.map(pos => convertPosAnnotationToWordSpan(pos, text));
-    const article = document.getElementById(articleId)
-    const articleText = article.querySelector("#articleText")
-    articleText.innerText = ""
-    for(let i = 0; i<wordSpans.length; i++){
-        articleText.appendChild(wordSpans[i])
+    const completeTextAnnotated = completeAnnotations(annotationsPos, text.length);
+    const wordSpans = completeTextAnnotated.map(pos => convertPosAnnotationToWordSpan(pos, text, articleId));
+    const article = document.getElementById(articleId);
+    const articleTitle = article.querySelector("#articleTitle");
+    const articleIntro = article.querySelector("#articleIntro");
+    const articleText = article.querySelector("#articleText");
+    articleTitle.innerText = "";
+    articleIntro.innerText = "";
+    articleText.innerText = "";
+    let i = 0;
+    let nextP = false;
+    while (i<wordSpans.length && !nextP){
+        if(wordSpans[i].innerText.includes("$§$")) {
+            const subIndex = wordSpans[i].innerText.indexOf("$§$");
+            wordSpans[i].innerText = wordSpans[i].innerText.substring(0, subIndex);
+            nextP = true;
+        }
+        articleTitle.appendChild(wordSpans[i]);
+        i++;
+    }
+    nextP = false;
+    while (i<wordSpans.length && !nextP){
+        if(wordSpans[i].innerText.includes("$§$")) {
+            const subIndex = wordSpans[i].innerText.indexOf("$§$");
+            wordSpans[i].innerText = wordSpans[i].innerText.substring(0, subIndex);
+            nextP = true;
+        }
+        articleIntro.appendChild(wordSpans[i]);
+        i++;
+    }
+    while (i<wordSpans.length){
+        articleText.appendChild(wordSpans[i]);
+        i++;
     }
 }
 
-const convertPosAnnotationToWordSpan = (annotation, text) => {
+function showTagInfo(tag, articleId, event) {
+
+    if(tagDescriptions[tag] == undefined){
+        return ;
+    }
+    const currentArticle = document.getElementById(articleId);
+
+    const tagDescription = currentArticle.querySelector("#tagDescription")
+    tagDescription.innerText = tagDescriptions[tag]
+
+    const tagName = currentArticle.querySelector("#tagName")
+    tagName.innerText = ", tag: "+tag
+
+    const tipDiv = currentArticle.querySelector("#posTagInfoTipDiv")
+    const offset = $(event.target).offset();
+    const height = $(event.target).outerHeight();
+    const color = $(event.target).css("background-color");
+    $(tipDiv).show()
+    $(tipDiv).offset({
+        'left': offset.left
+    });
+    $(tipDiv).offset({
+        'top': offset.top + height
+    });
+    $(tipDiv).width('10em')
+    $(tipDiv).css("background-color", color);
+}
+
+function hideTagInfo(articleId, ev){
+    const currentArticle = document.getElementById(articleId);
+    $(currentArticle.querySelector("#posTagInfoTipDiv")).css("display", "none");
+}
+
+const convertPosAnnotationToWordSpan = (annotation, text, articleId) => {
     const {begin, end, tag} = annotation;
-    const wordSpan = document.createElement("span")
-    wordSpan.innerText = text.substring(begin, end+1)
+    const wordSpan = document.createElement("span");
+    wordSpan.innerText = text.substring(begin, end+1);
+    wordSpan.onmouseover= function(ev) {showTagInfo(tag, articleId, ev)};
+    wordSpan.onmouseout = function (ev) {hideTagInfo(articleId, ev)}
     switch (tag){
         case "ADJ": wordSpan.style="background-color: green"; break;
         case "ADP": wordSpan.style="background-color: yellow"; break;
@@ -40,6 +105,7 @@ const convertPosAnnotationToWordSpan = (annotation, text) => {
         case "NOUN": wordSpan.style="background-color: blue"; break;
         case "NUM": wordSpan.style="background-color: darkblue"; break;
         case "PART": wordSpan.style="background-color: grey"; break;
+        case "PRON": wordSpan.style="background-color: salmon"; break;
         case "PROPN": wordSpan.style="background-color: pink"; break;
         case "PUNCT": wordSpan.style="background-color: white"; break;
         case "SCONJ": wordSpan.style="background-color: purple"; break;
@@ -89,9 +155,6 @@ const insertArticle = (articleInfo) => {
     articleIntro.innerText = textAttribs[1];
 
     const articleText = article.getElementById("articleText");
-    /*for(let i = 0; i<wordSpans.length; i++){
-        articleText.appendChild(wordSpans[i])
-    }*/
     articleText.innerText = textAttribs[2];
 
     const articleReference = article.getElementById("articleReference");
@@ -114,4 +177,3 @@ const insertArticle = (articleInfo) => {
     document.getElementById("articleTab").appendChild(article);
 }
 
-console.log("running");
