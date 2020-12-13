@@ -27,7 +27,28 @@
                 </article>
                 <button id="showAnnotationsButton" type="button">POS Annotationen zeigen</button>
             </div>
+            <div id="articleInfoDiv">
+                <p>Dieser Artikel enthält folgende Wortarten und Tags</p>
+                <dl id="posTagList">
+                    <dt id="tagPercentageElement">
+                        <span id="tagNameAndInfo"></span>
+                        <span id="tagPercentage"></span>
+                    </dt>
+                </dl>
+            </div>
         </section>
+    </template>
+
+    <template id="articleInformation">
+        <div id="articleInfoDiv">
+            <p>Dieser Artikel enthält folgende Wortarten und Tags</p>
+            <dl id="posTagList">
+                <dt id="tagPercentageElement">
+                    <span id="tagNameAndInfo"></span>
+                    <span id="tagPercentage"></span>
+                </dt>
+            </dl>
+        </div>
     </template>
 
     <body>

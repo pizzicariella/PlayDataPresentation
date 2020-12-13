@@ -36,7 +36,7 @@ class AnnotatedArticleController @Inject()(cc: ControllerComponents, val reactiv
   }
 
   def inMemoryArticleList = Action { implicit request =>
-    val path = "resources/analysedArticles"
+    val path = "resources/annotatedArticles.json"
     /*val articleList = readJsonFile(path).map(line => {
       val j = parseJson(line)
       println(j)

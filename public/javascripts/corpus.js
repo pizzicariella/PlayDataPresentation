@@ -4,6 +4,11 @@ const tagDescriptions = {ADJ: "Adjektiv", ADP: "Präposition", ADV: "Adverb", AU
     PART: "Partikel", PRON: "Pronomen", PROPN: "Eigenname", PUNCT: "Punctuation", SCONJ: "Konjunktion (subordinierend)",
     VERB: "Verb", X: "sonstige Wortart"};
 
+const tagColors = {ADJ: "green", ADP: "yellow", ADV: "darkgreen", AUX: "orange",
+    CCONJ: "purple", DET: "lightblue", INTJ: "brown", NOUN: "blue", NUM: "darkblue",
+    PART: "grey", PRON: "salmon", PROPN: "pink", PUNCT: "white", SCONJ: "purple",
+    VERB: "red", X: "darkgrey"};
+
 $(document).ready(function () {
     jsRoutes.controllers.AnnotatedArticleController.inMemoryArticleList().ajax({
         success: function (result){
@@ -17,7 +22,7 @@ $(document).ready(function () {
 });
 
 function showPosAnnotations(articleId) {
-    const articleInfo = loadedArticles.find(article => article._id === articleId);
+    const articleInfo = loadedArticles.find(article => article.id === articleId);
     const {_id, longUrl, crawlTime, text, annotationsPos} = articleInfo;
     const completeTextAnnotated = completeAnnotations(annotationsPos, text.length);
     const wordSpans = completeTextAnnotated.map(pos => convertPosAnnotationToWordSpan(pos, text, articleId));
@@ -94,25 +99,26 @@ const convertPosAnnotationToWordSpan = (annotation, text, articleId) => {
     wordSpan.innerText = text.substring(begin, end+1);
     wordSpan.onmouseover= function(ev) {showTagInfo(tag, articleId, ev)};
     wordSpan.onmouseout = function (ev) {hideTagInfo(articleId, ev)}
-    switch (tag){
-        case "ADJ": wordSpan.style="background-color: green"; break;
-        case "ADP": wordSpan.style="background-color: yellow"; break;
-        case "ADV": wordSpan.style="background-color: darkgreen"; break;
-        case "AUX": wordSpan.style="background-color: orange"; break;
-        case "CCONJ": wordSpan.style="background-color: purple"; break;
-        case "DET": wordSpan.style="background-color: lightblue"; break;
-        case "INTJ": wordSpan.style="background-color: brown"; break;
-        case "NOUN": wordSpan.style="background-color: blue"; break;
-        case "NUM": wordSpan.style="background-color: darkblue"; break;
-        case "PART": wordSpan.style="background-color: grey"; break;
-        case "PRON": wordSpan.style="background-color: salmon"; break;
-        case "PROPN": wordSpan.style="background-color: pink"; break;
-        case "PUNCT": wordSpan.style="background-color: white"; break;
-        case "SCONJ": wordSpan.style="background-color: purple"; break;
-        case "VERB": wordSpan.style="background-color: red"; break;
-        case "X": wordSpan.style="background-color: darkgrey"; break;
+    wordSpan.style="background-color: "+tagColors[tag]
+    /*switch (tag){
+        case "ADJ": wordSpan.style="background-color: "+tagColors.ADJ; break;
+        case "ADP": wordSpan.style="background-color: "+tagColors.ADP; break;
+        case "ADV": wordSpan.style="background-color: "+tagColors.ADV; break;
+        case "AUX": wordSpan.style="background-color: "+tagColors.AUX; break;
+        case "CCONJ": wordSpan.style="background-color: "+tagColors.CCONJ; break;
+        case "DET": wordSpan.style="background-color: "+tagColors.DET; break;
+        case "INTJ": wordSpan.style="background-color: "+tagColors.INTJ; break;
+        case "NOUN": wordSpan.style="background-color: "+tagColors.NOUN; break;
+        case "NUM": wordSpan.style="background-color: "+tagColors.NUM; break;
+        case "PART": wordSpan.style="background-color: "+tagColors.PART; break;
+        case "PRON": wordSpan.style="background-color: "+tagColors.PRON; break;
+        case "PROPN": wordSpan.style="background-color: "+tagColors.PROPN; break;
+        case "PUNCT": wordSpan.style="background-color: "+tagColors.PUNCT; break;
+        case "SCONJ": wordSpan.style="background-color: "+tagColors.SCONJ; break;
+        case "VERB": wordSpan.style="background-color: "+tagColors.VERB; break;
+        case "X": wordSpan.style="background-color: "+tagColors.X; break;
         case "empty": break;
-    }
+    }*/
     return wordSpan;
 }
 
@@ -139,14 +145,15 @@ function completeAnnotations(annotations, textLength) {
 }
 
 const insertArticle = (articleInfo) => {
-    const {_id, longUrl, crawlTime, text, annotationsPos} = articleInfo;
+    const {id, longUrl, crawlTime, text, annotationsPos, tagPercentage} = articleInfo;
 
     const textAttribs = text.split("$§$");
 
     const articleTemplate = document.getElementById("articleTemplate").content;
     const article = articleTemplate.cloneNode(true);
     const articleElement = article.getElementById("setToArticleId")
-    articleElement.id = _id
+    articleElement.id = id
+    articleElement.style.width = "50em"
 
     const articleTitle = article.getElementById("articleTitle");
     articleTitle.innerText = textAttribs[0];
@@ -172,8 +179,37 @@ const insertArticle = (articleInfo) => {
     articleReference.appendChild(dateSpan);
 
     const button = article.getElementById("showAnnotationsButton");
-    button.onclick = function () {showPosAnnotations(_id)}
+    button.onclick = function () {showPosAnnotations(id)}
+
+    createArticleInformation(tagPercentage, article);
+    const infoDiv = article.querySelector("#articleInfoDiv");
+    //infoDiv.style.display = none;
 
     document.getElementById("articleTab").appendChild(article);
+}
+
+function createArticleInformation(tagPercentage, article) {
+    const list = article.querySelector("#posTagList");
+    for(let i=0; i<tagPercentage.length; i++){
+        const {tag, percentage} = tagPercentage[i];
+        const dt = document.createElement("DT");
+        const tagSpan = document.createElement("SPAN");
+        const percentageSpan = document.createElement("SPAN");
+        let color = tagColors[tag];
+        let description = tagDescriptions[tag];
+        if(color == undefined){
+            color = "darkgrey";
+        }
+        tagSpan.style = "background-color: "+color;
+        if(description == undefined){
+            description = "unbekannt";
+        }
+        tagSpan.innerText = tagDescriptions[tag]+" ("+tag+")";
+        const percentageReadable = percentage*100
+        percentageSpan.innerText = ": "+percentageReadable.toFixed(2);
+        dt.appendChild(tagSpan);
+        dt.appendChild(percentageSpan);
+        list.appendChild(dt);
+    }
 }
 
