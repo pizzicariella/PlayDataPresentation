@@ -4,10 +4,15 @@ const tagDescriptions = {ADJ: "Adjektiv", ADP: "Präposition", ADV: "Adverb", AU
     PART: "Partikel", PRON: "Pronomen", PROPN: "Eigenname", PUNCT: "Punctuation", SCONJ: "Konjunktion (subordinierend)",
     VERB: "Verb", X: "sonstige Wortart"};
 
-const tagColors = {ADJ: "green", ADP: "yellow", ADV: "darkgreen", AUX: "orange",
+/*const tagColors = {ADJ: "green", ADP: "yellow", ADV: "darkgreen", AUX: "orange",
     CCONJ: "purple", DET: "lightblue", INTJ: "brown", NOUN: "blue", NUM: "darkblue",
     PART: "grey", PRON: "salmon", PROPN: "pink", PUNCT: "white", SCONJ: "purple",
-    VERB: "red", X: "darkgrey"};
+    VERB: "red", X: "darkgrey"};*/
+
+const tagColors = {ADJ: "#A1CE5E", ADP: "#FACF63", ADV: "#969A52", AUX: "#FBAF5F",
+    CCONJ: "#CCC1DB", DET: "#AEC6CC", INTJ: "#B38E50", NOUN: "#1A86A8", NUM: "#D2EFDB",
+    PART: "#C5AB89", PRON: "#FFB6AD", PROPN: "#00919C", PUNCT: "white", SCONJ: "#CCC1DB",
+    VERB: "#F68B69", X: "#C8C9D0"};
 
 $(document).ready(function () {
     jsRoutes.controllers.AnnotatedArticleController.inMemoryArticleList().ajax({
@@ -33,6 +38,7 @@ function showPosAnnotations(articleId) {
     articleTitle.innerText = "";
     articleIntro.innerText = "";
     articleText.innerText = "";
+    articleTitle.setAttribute("class", "w3-main")
     let i = 0;
     let nextP = false;
     while (i<wordSpans.length && !nextP){
@@ -100,25 +106,6 @@ const convertPosAnnotationToWordSpan = (annotation, text, articleId) => {
     wordSpan.onmouseover= function(ev) {showTagInfo(tag, articleId, ev)};
     wordSpan.onmouseout = function (ev) {hideTagInfo(articleId, ev)}
     wordSpan.style="background-color: "+tagColors[tag]
-    /*switch (tag){
-        case "ADJ": wordSpan.style="background-color: "+tagColors.ADJ; break;
-        case "ADP": wordSpan.style="background-color: "+tagColors.ADP; break;
-        case "ADV": wordSpan.style="background-color: "+tagColors.ADV; break;
-        case "AUX": wordSpan.style="background-color: "+tagColors.AUX; break;
-        case "CCONJ": wordSpan.style="background-color: "+tagColors.CCONJ; break;
-        case "DET": wordSpan.style="background-color: "+tagColors.DET; break;
-        case "INTJ": wordSpan.style="background-color: "+tagColors.INTJ; break;
-        case "NOUN": wordSpan.style="background-color: "+tagColors.NOUN; break;
-        case "NUM": wordSpan.style="background-color: "+tagColors.NUM; break;
-        case "PART": wordSpan.style="background-color: "+tagColors.PART; break;
-        case "PRON": wordSpan.style="background-color: "+tagColors.PRON; break;
-        case "PROPN": wordSpan.style="background-color: "+tagColors.PROPN; break;
-        case "PUNCT": wordSpan.style="background-color: "+tagColors.PUNCT; break;
-        case "SCONJ": wordSpan.style="background-color: "+tagColors.SCONJ; break;
-        case "VERB": wordSpan.style="background-color: "+tagColors.VERB; break;
-        case "X": wordSpan.style="background-color: "+tagColors.X; break;
-        case "empty": break;
-    }*/
     return wordSpan;
 }
 
@@ -153,7 +140,6 @@ const insertArticle = (articleInfo) => {
     const article = articleTemplate.cloneNode(true);
     const articleElement = article.getElementById("setToArticleId")
     articleElement.id = id
-    articleElement.style.width = "50em"
 
     const articleTitle = article.getElementById("articleTitle");
     articleTitle.innerText = textAttribs[0];
@@ -183,7 +169,6 @@ const insertArticle = (articleInfo) => {
 
     createArticleInformation(tagPercentage, article);
     const infoDiv = article.querySelector("#articleInfoDiv");
-    //infoDiv.style.display = none;
 
     document.getElementById("articleTab").appendChild(article);
 }
@@ -206,7 +191,7 @@ function createArticleInformation(tagPercentage, article) {
         }
         tagSpan.innerText = tagDescriptions[tag]+" ("+tag+")";
         const percentageReadable = percentage*100
-        percentageSpan.innerText = ": "+percentageReadable.toFixed(2);
+        percentageSpan.innerText = ": "+percentageReadable.toFixed(2)+"%";
         dt.appendChild(tagSpan);
         dt.appendChild(percentageSpan);
         list.appendChild(dt);

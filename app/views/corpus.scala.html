@@ -1,6 +1,7 @@
 @(title: String)(implicit request: RequestHeader)
 
 <!DOCTYPE html>
+<!-- Using template from w3schools.com: https://www.w3schools.com/w3css/tryw3css_templates_webpage.htm -->
 <html lang="de">
 
     <head>
@@ -9,13 +10,18 @@
         <script type="text/javascript" src="@routes.Assets.versioned("lib/jquery/jquery.min.js")"></script>
         <script src="@routes.Assets.versioned("javascripts/corpus.js")" type="text/javascript"></script>
         <script type="text/javascript" src="@routes.AnnotatedArticleController.jsRoutes"></script>
+        <link rel="stylesheet" href="@routes.Assets.versioned("stylesheets/corpus.css")">
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+        <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-black.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     </head>
 
     <template id="articleTemplate">
-        <section>
-            <div>
-                <article id="setToArticleId">
-                    <h1 id="articleTitle"></h1>
+        <section class="w3-row w3-padding-64">
+            <div class="w3-twothird w3-container">
+                <article id="setToArticleId" >
+                    <h1 id="articleTitle" class="w3-text-teal"></h1>
                     <p><i id="articleIntro"></i></p>
                     <p id="articleText"></p>
                     <p id="articleReference"></p>
@@ -27,7 +33,7 @@
                 </article>
                 <button id="showAnnotationsButton" type="button">POS Annotationen zeigen</button>
             </div>
-            <div id="articleInfoDiv">
+            <div id="articleInfoDiv" class="w3-third w3-container">
                 <p>Dieser Artikel enthält folgende Wortarten und Tags</p>
                 <dl id="posTagList">
                     <dt id="tagPercentageElement">
@@ -39,46 +45,28 @@
         </section>
     </template>
 
-    <template id="articleInformation">
-        <div id="articleInfoDiv">
-            <p>Dieser Artikel enthält folgende Wortarten und Tags</p>
-            <dl id="posTagList">
-                <dt id="tagPercentageElement">
-                    <span id="tagNameAndInfo"></span>
-                    <span id="tagPercentage"></span>
-                </dt>
-            </dl>
-        </div>
-    </template>
-
     <body>
-        <section id = "content">
-            <div>
-                <article>
-                    <h1>News Corpus</h1>
-                    <p>bisschen blabla über Corpus Daten, und so weiter...</p>
-                </article>
-                <!--
-                <article>
-                    <h2>Umfrage zu künstlicher Intelligenz: R2-D2 ist die KI der Herzen</h2>
-                    <h3>Ein Forschungsinstitut hat Menschen gefragt, wie sie sich künstliche Intelligenz vorstellen – anhand von Figuren aus der Popkultur.</h3>
-                    <p>Bei der künstlichen Intelligenz heißt es oft, man müsse den Menschen die Angst davor nehmen oder wenigstens die „Bedenken“. So steht es häufig in Einlassungen zu dem Thema, so äußert sich die Digitalbeauftragte Dorothee Bär gerne. Eine neue Umfrage legt dagegen nahe, dass die meisten Menschen in Deutschland die KI gar nicht furchteinflößend finden, sondern eher sympathisch. Zumindest, wenn man sie durch die popkulturelle Blume danach fragt.
-
-                        Knapp 1.300 Menschen ab 16 Jahren hat das Meinungsforschungsinsitut Allensbach befragt, im Auftrag des Fachverbands Gesellschaft für Informatik. Unter anderem sollten die Befragten angeben, welche Roboterfigur aus Film und Fernsehen am nächsten an ihre Vorstellung von KI herankommt. Gewonnen hat, mit 20 Prozent der Befragten: R2-D2, der Robo-Mechaniker aus der „Star Wars“-Reihe, der nur in Pieptönen spricht. Und der ist alles andere als bedrohlich.
-
-                        R2-D2 (für alle, die in einer weit entfernten Galaxie leben: Man spricht das „Errzwo-Deezwo“) landete einige Prozentpunkte vor dem Terminator (schon eher gefährliche Killermaschine, zumindest zu Beginn der Reihe) sowie Commander Data aus „Star Trek“ und das Auto K.I.T.T. aus „Knight Rider“. Diese vier waren auch die bekanntesten fiktiven Roboter unter den Befragten. Etwas abgeschlagen liegen Agent Smith und Wall-E.
-
-                        Mit der Studie will die Gesellschaft für Informatik (die dafür wiederum Förderung vom Bildungsministerium bekommen hat) weniger die Sci-Fi-Nerds gegeneinander aufbringen als vielmehr eine Message senden: KI, das kennt ihr doch schon. Kein Grund zur Panik.
-
-                        Popkultur hat gute Vorarbeit geleistet
-
-                        Und tatsächlich sind künstliche Intelligenzen, darunter fallen sowohl einfach gestrickte Servicebots als auch komplexe lernende Programme, derzeit einfach nur Maschinen, die vorgegebene Gedankengänge schneller und effizienter denken. Sie sind nicht dabei, heimlich einen Putsch auszuhecken. Sie stehen im Dienst von Medizin, Wissenschaft, Verkehr, Politik und vielem mehr. Und da, wo sie Blödsinn machen, tun sie es einfach den Menschen gleich.
-
-                        Was lernen wir daraus? Die Popkultur hat in den letzten Jahrzehnten gute Vorarbeit geleistet, sodass einem harmonischen Zusammenleben mit KI eigentlich nichts mehr im Wege steht. Zumindest solange sie in einem Dienstverhältnis zu uns steht und putzig aussieht.</p>
-                </article>
-                -->
+            <!-- Navbar -->
+        <div class="w3-top">
+            <div class="w3-bar w3-theme w3-top w3-left-align w3-large">
+                <a class="w3-bar-item w3-button w3-right w3-hide-large w3-hover-white w3-large w3-theme-l1" href="javascript:void(0)" onclick="w3_open()"><i class="fa fa-bars"></i></a>
+                <a href="#" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Home</a>
+                <a href="#" class="w3-bar-item w3-button w3-theme-l1">Corpus</a>
+                <a href="#" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Analyse</a>
+                <a href="#" class="w3-bar-item w3-button w3-hide-small w3-hover-white">About</a>
+                <a href="#" class="w3-bar-item w3-button w3-hide-small w3-hide-medium w3-hover-white">Contact</a>
             </div>
-            <main>
+        </div>
+        <section id = "content">
+            <div class="w3-main" style="margin-left:20px">
+                <div class="w3-twothird w3-container">
+                    <article class="w3-row w3-padding-64">
+                        <h1>News Corpus</h1>
+                        <p>bisschen blabla über Corpus Daten, und so weiter...</p>
+                    </article>
+                </div>
+            </div>
+            <main class="w3-main" style="margin-left:20px">
                 <div id="articleTab"></div>
             </main>
         </section>

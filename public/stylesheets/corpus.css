@@ -1,0 +1,12 @@
+.articleDiv{
+    //display: inline-block;
+    //width: 60em;
+}
+
+.articleStatistics{
+    float: right;
+}
+
+.articleTitle {
+    color: black;
+}
