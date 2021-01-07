@@ -26,7 +26,7 @@ class HomeController @Inject()(implicit ec: ExecutionContext,
   }
 
   def corpus = Action { implicit request =>
-    Ok(views.html.corpus("News Corpus"))
+    Ok(views.html.corpus())
   }
 
   def analyze = Action {

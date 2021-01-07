@@ -2,13 +2,31 @@
 
 <!DOCTYPE html>
 <html lang="de">
+        <!-- Using template from w3schools.com: https://www.w3schools.com/w3css/tryw3css_templates_webpage.htm -->
 
 <head>
     <title>@title</title>
     <meta name="viewport" content="width=device-width, initial-scala=1.0">
+    <script src="@routes.Assets.versioned("javascripts/main.js")" type="text/javascript"></script>
+    <link rel="stylesheet" href="@routes.Assets.versioned("stylesheets/corpus.css")">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-black.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 <body>
+        <!-- Navbar -->
+    <div class="w3-top">
+        <div class="w3-bar w3-theme w3-top w3-left-align w3-large">
+            <a class="w3-bar-item w3-button w3-right w3-hide-large w3-hover-white w3-large w3-theme-l1" href="javascript:void(0)" ><i class="fa fa-bars"></i></a>
+            <a href="@routes.HomeController.index" class="w3-bar-item w3-button w3-theme-l1" onclick="navbarSelection(this)">Home</a>
+            <a href="@routes.HomeController.corpus" class="w3-bar-item w3-button w3-hide-small w3-hover-white" onclick="return navbarSelection();">Corpus</a>
+            <a href="@routes.HomeController.analyze" class="w3-bar-item w3-button w3-hide-small w3-hover-white" onclick="navbarSelection(this)">Analyse</a>
+            <a href="@routes.HomeController.info" class="w3-bar-item w3-button w3-hide-small w3-hover-white" onclick="navbarSelection(this)">About</a>
+            <a href="#" class="w3-bar-item w3-button w3-hide-small w3-hide-medium w3-hover-white" onclick="navbarSelection(this)">Contact</a>
+        </div>
+    </div>
     @content
 </body>
 
