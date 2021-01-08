@@ -4,11 +4,6 @@ const tagDescriptions = {ADJ: "Adjektiv", ADP: "Präposition", ADV: "Adverb", AU
     PART: "Partikel", PRON: "Pronomen", PROPN: "Eigenname", PUNCT: "Punctuation", SCONJ: "Konjunktion (subordinierend)",
     VERB: "Verb", X: "sonstige Wortart"};
 
-/*const tagColors = {ADJ: "green", ADP: "yellow", ADV: "darkgreen", AUX: "orange",
-    CCONJ: "purple", DET: "lightblue", INTJ: "brown", NOUN: "blue", NUM: "darkblue",
-    PART: "grey", PRON: "salmon", PROPN: "pink", PUNCT: "white", SCONJ: "purple",
-    VERB: "red", X: "darkgrey"};*/
-
 const tagColors = {ADJ: "#A1CE5E", ADP: "#FACF63", ADV: "#969A52", AUX: "#FBAF5F",
     CCONJ: "#CCC1DB", DET: "#AEC6CC", INTJ: "#B38E50", NOUN: "#1A86A8", NUM: "#D2EFDB",
     PART: "#C5AB89", PRON: "#FFB6AD", PROPN: "#00919C", PUNCT: "white", SCONJ: "#CCC1DB",
@@ -25,6 +20,7 @@ $(document).ready(function () {
         }
     });
 });
+
 
 function showPosAnnotations(articleId) {
     const articleInfo = loadedArticles.find(article => article.id === articleId);
@@ -168,7 +164,6 @@ const insertArticle = (articleInfo) => {
     button.onclick = function () {showPosAnnotations(id)}
 
     createArticleInformation(tagPercentage, article);
-    const infoDiv = article.querySelector("#articleInfoDiv");
 
     document.getElementById("articleTab").appendChild(article);
 }
@@ -198,23 +193,7 @@ function createArticleInformation(tagPercentage, article) {
     }
 }
 
-/*function navbarSelection(){
-    console.log("clicked");
-    const navbarGrey = document.getElementsByClassName("w3-theme-l1");
-    console.log(navbarGrey.item(1))
-    const navbarBlack = document.getElementsByClassName("w3-bar-item w3-button w3-hide-small w3-hover-white");
-    for(let i; i<navbarGrey.length; i++){
-        console.log("infor")
-        console.log(navbarGrey.item(i))
-        navbarGrey.item(i).class = "w3-bar-item w3-button w3-hide-small w3-hover-white";
-    }
-    for(let i; i<navbarBlack.length; i++){
-        if(navbarBlack.item(i).innerText == "Corpus"){
-            navbarBlack.item(i).class = "w3-bar-item w3-button w3-theme-l1"
-        }
-    }
-}*/
 
-//navbarSelection()
+
 
 
