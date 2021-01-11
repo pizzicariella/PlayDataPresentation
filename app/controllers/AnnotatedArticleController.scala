@@ -21,6 +21,7 @@ class AnnotatedArticleController @Inject()(cc: ControllerComponents, val reactiv
 
   implicit def ec: ExecutionContext = cc.executionContext
 
+  //TODO get collection name from config file
   def collection: Future[JSONCollection] = database.map(_.collection[JSONCollection]("annotated_articles"))
 
   def articleList = Action.async { implicit request =>

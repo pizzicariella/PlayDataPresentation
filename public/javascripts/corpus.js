@@ -10,7 +10,7 @@ const tagColors = {ADJ: "#A1CE5E", ADP: "#FACF63", ADV: "#969A52", AUX: "#FBAF5F
     VERB: "#F68B69", X: "#C8C9D0"};
 
 $(document).ready(function () {
-    jsRoutes.controllers.AnnotatedArticleController.inMemoryArticleList().ajax({
+    jsRoutes.controllers.AnnotatedArticleController.articleList().ajax({
         success: function (result){
             loadedArticles = result
             result.forEach(article => insertArticle(article))
@@ -23,7 +23,7 @@ $(document).ready(function () {
 
 
 function showPosAnnotations(articleId) {
-    const articleInfo = loadedArticles.find(article => article.id === articleId);
+    const articleInfo = loadedArticles.find(article => article._id === articleId);
     const {_id, longUrl, crawlTime, text, annotationsPos} = articleInfo;
     const completeTextAnnotated = completeAnnotations(annotationsPos, text.length);
     const wordSpans = completeTextAnnotated.map(pos => convertPosAnnotationToWordSpan(pos, text, articleId));
@@ -128,14 +128,14 @@ function completeAnnotations(annotations, textLength) {
 }
 
 const insertArticle = (articleInfo) => {
-    const {id, longUrl, crawlTime, text, annotationsPos, tagPercentage} = articleInfo;
+    const {_id, longUrl, crawlTime, text, annotationsPos, tagPercentage} = articleInfo;
 
     const textAttribs = text.split("$§$");
 
     const articleTemplate = document.getElementById("articleTemplate").content;
     const article = articleTemplate.cloneNode(true);
     const articleElement = article.getElementById("setToArticleId")
-    articleElement.id = id
+    articleElement.id = _id
 
     const articleTitle = article.getElementById("articleTitle");
     articleTitle.innerText = textAttribs[0];
@@ -155,13 +155,13 @@ const insertArticle = (articleInfo) => {
     const sourceSpan = document.createElement("span");
     sourceSpan.innerText = "Quelle: ";
     const dateSpan = document.createElement("span");
-    dateSpan.innerText = " aufgerufen am: ".concat(new Date(parseInt(crawlTime)).toString());
+    dateSpan.innerText = " aufgerufen am: ".concat(new Date(crawlTime["$date"]).toString());
     articleReference.appendChild(sourceSpan);
     articleReference.appendChild(link);
     articleReference.appendChild(dateSpan);
 
     const button = article.getElementById("showAnnotationsButton");
-    button.onclick = function () {showPosAnnotations(id)}
+    button.onclick = function () {showPosAnnotations(_id)}
 
     createArticleInformation(tagPercentage, article);
 
@@ -170,6 +170,7 @@ const insertArticle = (articleInfo) => {
 
 function createArticleInformation(tagPercentage, article) {
     const list = article.querySelector("#posTagList");
+    tagPercentage.sort(compareTP);
     for(let i=0; i<tagPercentage.length; i++){
         const {tag, percentage} = tagPercentage[i];
         const dt = document.createElement("DT");
@@ -190,6 +191,14 @@ function createArticleInformation(tagPercentage, article) {
         dt.appendChild(tagSpan);
         dt.appendChild(percentageSpan);
         list.appendChild(dt);
+    }
+}
+
+function compareTP(tp1, tp2){
+    if (tp1.percentage < tp2.percentage){
+        return 1;
+    } else {
+        return -1;
     }
 }
 
