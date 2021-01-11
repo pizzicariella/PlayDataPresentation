@@ -1,4 +1,5 @@
-@()
+@(textForm: Form[String])(implicit messages: Messages)
+
 @main("Analyse") {
 
 <section id="content">
@@ -6,7 +7,10 @@
         <article>
             <h1>Text analysieren</h1>
             <p>Hier einfach einen beliebigen Text einfügen und auf "Analysieren" drücken</p>
-            <textarea>Hier Text einfügen</textarea>
+            <!--<textarea>Hier Text einfügen</textarea> -->
+            @helper.form(action = routes.HomeController.analyze()){
+                @helper.textarea(textForm("text"))
+            }
             <p>
                 <button type="submit">Analysieren</button>
             </p>

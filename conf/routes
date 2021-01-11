@@ -7,6 +7,7 @@
 GET     /                           controllers.HomeController.index
 GET     /corpus                     controllers.HomeController.corpus
 GET     /analyze                    controllers.HomeController.analyze
+#GET    /analyze/text               controllers.HomeController.analyzeText
 GET     /info                       controllers.HomeController.info
 GET     /corpus/articles            controllers.AnnotatedArticleController.articleList
 GET     /corpus/test/articles       controllers.AnnotatedArticleController.inMemoryArticleList

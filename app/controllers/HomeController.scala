@@ -2,6 +2,11 @@ package controllers
 
 import javax.inject._
 import play.api.mvc._
+import play.api.data._
+import play.api.data.Forms._
+import play.api.data.validation.Constraints._
+import play.api.i18n.I18nSupport
+
 import play.api.routing.JavaScriptReverseRouter
 import play.mvc.Http.MimeTypes
 
@@ -13,8 +18,10 @@ import scala.concurrent.ExecutionContext
  */
 @Singleton
 class HomeController @Inject()(implicit ec: ExecutionContext,
-                               cc: ControllerComponents) extends AbstractController(cc) {
+                               cc: ControllerComponents) extends AbstractController(cc) with I18nSupport {
 
+
+  val textForm = Form(single("text" -> nonEmptyText))
   /**
    * Create an Action to render an HTML page with a welcome message.
    * The configuration in the `routes` file means that this method
@@ -29,8 +36,23 @@ class HomeController @Inject()(implicit ec: ExecutionContext,
     Ok(views.html.corpus())
   }
 
-  def analyze = Action {
-    Ok(views.html.analyze())
+  def analyze = Action { implicit request =>
+    Ok(views.html.analyze(textForm))
+  }
+
+  def analyzeText = Action { implicit request =>
+
+    //val textValue = textForm.bind(Map("text" -> "testText")).get
+    textForm.bindFromRequest.fold(
+      hasErrors => {
+        //TODO handle errors
+        BadRequest(views.html.analyze(textForm))
+    },
+      textData => {
+        //TODO
+        Ok(views.html.analyze(textForm))
+      }
+    )
   }
 
   def info = Action {
