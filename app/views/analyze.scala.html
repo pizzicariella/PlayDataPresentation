@@ -1,4 +1,4 @@
-@(textForm: Form[String])(implicit messages: Messages)
+@(textForm: Form[TextToTag])(implicit request: MessagesRequestHeader)
 
 @main("Analyse") {
 
@@ -7,13 +7,12 @@
         <article>
             <h1>Text analysieren</h1>
             <p>Hier einfach einen beliebigen Text einfügen und auf "Analysieren" drücken</p>
-            <!--<textarea>Hier Text einfügen</textarea> -->
-            @helper.form(action = routes.HomeController.analyze()){
+            @helper.form(action = routes.HomeController.validateTextForm()){
                 @helper.textarea(textForm("text"))
+                <div class="formActions">
+                    <button type="submit">Analysieren</button>
+                </div>
             }
-            <p>
-                <button type="submit">Analysieren</button>
-            </p>
         </article>
     </div>
 </section>

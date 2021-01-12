@@ -1,12 +1,12 @@
 package controllers
 
 import java.io.{File, FileInputStream}
-
 import entities.AnnotatedArticle
+
 import javax.inject.Inject
 import play.api.libs.json.{JsObject, _}
-import play.api.mvc.{AbstractController, ControllerComponents}
-import play.api.routing.JavaScriptReverseRouter
+import play.api.mvc._
+import play.api.routing._
 import play.modules.reactivemongo.{MongoController, ReactiveMongoApi, ReactiveMongoComponents}
 import play.mvc.Http.MimeTypes
 import reactivemongo.api.Cursor
@@ -55,7 +55,7 @@ class AnnotatedArticleController @Inject()(cc: ControllerComponents, val reactiv
     )
   }
 
-  def jsRoutes = Action { implicit request =>
+  def javascriptRoutes = Action { implicit request =>
     Ok(JavaScriptReverseRouter("jsRoutes")
     (routes.javascript.AnnotatedArticleController.articleList,
       routes.javascript.AnnotatedArticleController.inMemoryArticleList)).as(MimeTypes.JAVASCRIPT)

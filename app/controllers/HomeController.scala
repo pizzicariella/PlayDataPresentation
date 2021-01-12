@@ -12,16 +12,17 @@ import play.mvc.Http.MimeTypes
 
 import scala.concurrent.ExecutionContext
 
+case class TextToTag(text: String)
+
 /**
  * This controller creates an `Action` to handle HTTP requests to the
  * application's home page.
  */
 @Singleton
 class HomeController @Inject()(implicit ec: ExecutionContext,
-                               cc: ControllerComponents) extends AbstractController(cc) with I18nSupport {
+                               cc: MessagesControllerComponents) extends MessagesAbstractController(cc) {
 
-
-  val textForm = Form(single("text" -> nonEmptyText))
+  val textForm = Form(mapping("text" -> text)(TextToTag.apply)(TextToTag.unapply))
   /**
    * Create an Action to render an HTML page with a welcome message.
    * The configuration in the `routes` file means that this method
@@ -36,22 +37,18 @@ class HomeController @Inject()(implicit ec: ExecutionContext,
     Ok(views.html.corpus())
   }
 
-  def analyze = Action { implicit request =>
+  def analyze() = Action { implicit request =>
     Ok(views.html.analyze(textForm))
   }
 
-  def analyzeText = Action { implicit request =>
-
-    //val textValue = textForm.bind(Map("text" -> "testText")).get
+  def validateTextForm = Action { implicit request =>
     textForm.bindFromRequest.fold(
-      hasErrors => {
-        //TODO handle errors
-        BadRequest(views.html.analyze(textForm))
-    },
-      textData => {
-        //TODO
-        Ok(views.html.analyze(textForm))
-      }
+      formWithErrors => BadRequest(views.html.analyze(formWithErrors)),
+        data => {
+          val filledForm = textForm.fill(TextToTag(data.text))
+          //Redirect(routes.HomeController.analyze(filledForm))
+          Ok(views.html.analyze(filledForm))
+        }
     )
   }
 
