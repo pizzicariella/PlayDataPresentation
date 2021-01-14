@@ -9,12 +9,18 @@ import play.api.mvc._
 import play.api.routing._
 import play.modules.reactivemongo.{MongoController, ReactiveMongoApi, ReactiveMongoComponents}
 import play.mvc.Http.MimeTypes
-import reactivemongo.api.Cursor
+import reactivemongo.api.{AsyncDriver, Cursor, DB, MongoConnection, ReadPreference}
+import reactivemongo.api.bson.{BSONDocument, BSONDocumentReader, BSONDocumentWriter, BSONObjectID, BSONValue, Macros, document}
 import reactivemongo.play.json._
-import reactivemongo.play.json.collection.{JSONCollection, _}
+
+import compat._
+import reactivemongo.api.bson.collection.BSONCollection
+import reactivemongo.play.json.collection.JSONCollection
+//import reactivemongo.play.json.collection.{JSONCollection, _}
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.io.Source
+
 
 class AnnotatedArticleController @Inject()(cc: ControllerComponents, val reactiveMongoApi: ReactiveMongoApi)
   extends AbstractController(cc) with MongoController with ReactiveMongoComponents {
@@ -22,16 +28,34 @@ class AnnotatedArticleController @Inject()(cc: ControllerComponents, val reactiv
   implicit def ec: ExecutionContext = cc.executionContext
 
   //TODO get collection name from config file
-  def collection: Future[JSONCollection] = database.map(_.collection[JSONCollection]("annotated_articles"))
+  //val mongoUri = "mongodb://marie:password@localhost:27017"
+  //val driver = AsyncDriver()
+  //val parsedUri = MongoConnection.fromString(mongoUri)
+  //val futureConnection = parsedUri.flatMap(driver.connect(_))
+  //def db: Future[DB] = futureConnection.flatMap(_.database("ba"))
+
+  //def articleCollection: Future[BSONCollection] = reactiveMongoApi.database.map(_.collection("annotated_articles"))
+  def articleCollection: Future[JSONCollection] = database.map(_.collection[JSONCollection]("annotated_articles"))
 
   def articleList = Action.async { implicit request =>
 
-    val cursor: Future[Cursor[AnnotatedArticle]] = collection.map {
+    /*val cursor: Future[Cursor[AnnotatedArticle]] = articleCollection.map {
       _.find(Json.obj(), projection = Option.empty[JsObject]).cursor[AnnotatedArticle]()
-    }
+    }*/
+    //articleCollection
+   // val cursor = articleCollection.map(_.find(BSONDocument.empty).cursor[AnnotatedArticle]())
 
-    val futureArticleList: Future[List[AnnotatedArticle]] =
-      cursor.flatMap(_.collect[List](-1, Cursor.FailOnError[List[AnnotatedArticle]]()))
+    /*val futureArticleList: Future[List[AnnotatedArticle]] =
+      cursor.flatMap(_.collect[List](-1, Cursor.FailOnError[List[AnnotatedArticle]]()))*/
+
+    /*val futureArticleList = articleCollection.flatMap(_.find("age" -> 13))
+      .cursor[AnnotatedArticle]().collect[List](-1, Cursor.FailOnError[List[AnnotatedArticle]]()))*/
+    //val futureArticleList = cursor.flatMap(_.collect[List]())
+    val futureArticleList: Future[Seq[AnnotatedArticle]] = articleCollection
+      .flatMap(articleCollection => articleCollection
+        .find(Json.obj(), projection = Option.empty[JsObject])
+        .cursor[AnnotatedArticle](ReadPreference.primary)
+        .collect[Seq](-1, Cursor.FailOnError[Seq[AnnotatedArticle]]()))
 
     futureArticleList.map { article => Ok(Json.toJson(article)) }
   }

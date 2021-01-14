@@ -6,9 +6,9 @@ import play.api.data._
 import play.api.data.Forms._
 import play.api.data.validation.Constraints._
 import play.api.i18n.I18nSupport
-
 import play.api.routing.JavaScriptReverseRouter
 import play.mvc.Http.MimeTypes
+import services.Annotator
 
 import scala.concurrent.ExecutionContext
 
@@ -20,7 +20,8 @@ case class TextToTag(text: String)
  */
 @Singleton
 class HomeController @Inject()(implicit ec: ExecutionContext,
-                               cc: MessagesControllerComponents) extends MessagesAbstractController(cc) {
+                               cc: MessagesControllerComponents,
+                               annotator: Annotator) extends MessagesAbstractController(cc) {
 
   val textForm = Form(mapping("text" -> text)(TextToTag.apply)(TextToTag.unapply))
   /**
@@ -45,7 +46,9 @@ class HomeController @Inject()(implicit ec: ExecutionContext,
     textForm.bindFromRequest.fold(
       formWithErrors => BadRequest(views.html.analyze(formWithErrors)),
         data => {
-          val filledForm = textForm.fill(TextToTag(data.text))
+          val test = annotator.annotate(data.text)
+          //val filledForm = textForm.fill(TextToTag(data.text))
+          val filledForm = textForm.fill(TextToTag(test))
           //Redirect(routes.HomeController.analyze(filledForm))
           Ok(views.html.analyze(filledForm))
         }

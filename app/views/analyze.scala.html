@@ -7,7 +7,7 @@
         <article>
             <h1>Text analysieren</h1>
             <p>Hier einfach einen beliebigen Text einfügen und auf "Analysieren" drücken</p>
-            @helper.form(action = routes.HomeController.validateTextForm()){
+            @helper.form(action = helper.CSRF(routes.HomeController.validateTextForm())){
                 @helper.textarea(textForm("text"))
                 <div class="formActions">
                     <button type="submit">Analysieren</button>
