@@ -28,6 +28,7 @@ class HomeController @Inject()(implicit ec: ExecutionContext,
 
   var textForm = Form(mapping("text" -> text)(TextToTag.apply)(TextToTag.unapply))
   var at: AnnotatedToken = null
+  var loadAnnos: String = "f"
   /**
    * Create an Action to render an HTML page with a welcome message.
    * The configuration in the `routes` file means that this method
@@ -43,16 +44,18 @@ class HomeController @Inject()(implicit ec: ExecutionContext,
   }
 
   def analyze() = Action { implicit request =>
-    Ok(views.html.analyze(textForm))
+    Ok(views.html.analyze(textForm, loadAnnos))
   }
 
   def validateTextForm = Action { implicit request =>
     textForm.bindFromRequest.fold(
-      formWithErrors => BadRequest(views.html.analyze(formWithErrors)),
+      formWithErrors => BadRequest(views.html.analyze(formWithErrors, "f")),
         data => {
+          //TODO avoid vars and directly call views?
           at = annotator.annotate(data.text)
           val filledForm = textForm.fill(TextToTag(data.text))
           textForm = filledForm
+          loadAnnos = "t"
           //val filledForm = textForm.fill(TextToTag(test))
           //Redirect(routes.HomeController.analyze(filledForm))
           annotatedText

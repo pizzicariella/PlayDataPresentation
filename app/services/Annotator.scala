@@ -16,6 +16,7 @@ trait Annotator {
 @Singleton
 class PosPipeAnnotator extends Annotator {
 
+  //TODO initialize sc earlier, this is super slow
   val sc: SparkSession = SparkSession
     .builder()
     .appName("PlayDataPresentation")
@@ -26,7 +27,6 @@ class PosPipeAnnotator extends Annotator {
   override def annotate(text: String): AnnotatedToken = {
     val model = PipelineModel.load("resources/posPipelineModel")
     val map = new LightPipeline(model).annotate(text)
-    println(map)
     val normalized = map.getOrElse("normalized", Seq[String]("error"))
     val pos = map.getOrElse("pos", Seq[String]("error"))
     AnnotatedToken(pos, normalized)

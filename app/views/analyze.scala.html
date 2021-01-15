@@ -1,9 +1,13 @@
-@(textForm: Form[TextToTag])(implicit request: MessagesRequestHeader)
+@(textForm: Form[TextToTag], loadAnnos: String)(implicit request: MessagesRequestHeader)
 
 <head>
     <script type="text/javascript" src="@routes.Assets.at("lib/jquery/jquery.min.js")"></script>
     <script type="text/javascript" src="@routes.AnnotatedArticleController.javascriptRoutes"></script>
     <script src="@routes.Assets.at("javascripts/analyzeText.js")" type="text/javascript"></script>
+    <script>
+        let la = "@loadAnnos"
+        $(document).ready(start(la))
+    </script>
 </head>
 
 @main("Analyse") {
@@ -16,7 +20,7 @@
             @helper.form(action = helper.CSRF(routes.HomeController.validateTextForm())){
                 @helper.textarea(textForm("text"))
                 <div class="formActions">
-                    <button type="submit" id="submitButton">Analysieren</button>
+                    <button type="submit">Analysieren</button>
                 </div>
             }
         </article>
