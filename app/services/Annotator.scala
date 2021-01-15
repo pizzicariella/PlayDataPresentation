@@ -22,7 +22,6 @@ class PosPipeAnnotator extends Annotator {
     .master("local[*]")
     .getOrCreate()
 
-  import sc.implicits._
 
   override def annotate(text: String): String = {
     val model = PipelineModel.load("resources/posPipelineModel")
