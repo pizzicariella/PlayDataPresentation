@@ -2,7 +2,7 @@ package services
 
 import com.google.inject.ImplementedBy
 import com.johnsnowlabs.nlp.LightPipeline
-import entities.AnnotatedArticle
+import entities.{AnnotatedArticle, AnnotatedToken}
 import org.apache.spark.ml.PipelineModel
 import org.apache.spark.sql.SparkSession
 
@@ -10,7 +10,7 @@ import javax.inject._
 
 @ImplementedBy(classOf[PosPipeAnnotator])
 trait Annotator {
-  def annotate(text: String): String
+  def annotate(text: String): AnnotatedToken
 }
 
 @Singleton
@@ -23,9 +23,12 @@ class PosPipeAnnotator extends Annotator {
     .getOrCreate()
 
 
-  override def annotate(text: String): String = {
+  override def annotate(text: String): AnnotatedToken = {
     val model = PipelineModel.load("resources/posPipelineModel")
     val map = new LightPipeline(model).annotate(text)
-    map.getOrElse("pos", Seq[String]("error")).head
+    println(map)
+    val normalized = map.getOrElse("normalized", Seq[String]("error"))
+    val pos = map.getOrElse("pos", Seq[String]("error"))
+    AnnotatedToken(pos, normalized)
   }
 }

@@ -82,7 +82,8 @@ class AnnotatedArticleController @Inject()(cc: ControllerComponents, val reactiv
   def javascriptRoutes = Action { implicit request =>
     Ok(JavaScriptReverseRouter("jsRoutes")
     (routes.javascript.AnnotatedArticleController.articleList,
-      routes.javascript.AnnotatedArticleController.inMemoryArticleList)).as(MimeTypes.JAVASCRIPT)
+      routes.javascript.AnnotatedArticleController.inMemoryArticleList,
+      routes.javascript.HomeController.annotatedText)).as(MimeTypes.JAVASCRIPT)
   }
 
   def parseJsonFromFile(path: String): List[AnnotatedArticle] = {
