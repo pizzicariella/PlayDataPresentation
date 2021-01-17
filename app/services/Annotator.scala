@@ -29,6 +29,6 @@ class PosPipeAnnotator extends Annotator {
     val map = new LightPipeline(model).annotate(text)
     val normalized = map.getOrElse("normalized", Seq[String]("error"))
     val pos = map.getOrElse("pos", Seq[String]("error"))
-    AnnotatedToken(pos, normalized)
+    AnnotatedToken(text, pos, normalized)
   }
 }
