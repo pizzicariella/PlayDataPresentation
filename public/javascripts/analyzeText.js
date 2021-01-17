@@ -13,9 +13,7 @@ function start(arg) {
         if(arg == "t"){
             jsRoutes.controllers.HomeController.annotatedText().ajax({
                 success: function (result){
-                    //loadedArticles = result
-                    console.log(result)
-                    //result.forEach(article => insertArticle(article))
+                    annotateText(result)
                 },
                 failure: function (err){
                     console.log("there was an error")
@@ -28,32 +26,71 @@ function start(arg) {
     }
 }
 
-//TODO test
 function annotateText(annotated) {
-    const spans = createAnnotatedTextSpans(annotated)
-    const textField = document.getElementById("text");
-    spans.map(span => textField.appendChild(span))
+    const spans = createAnnotatedTextSpans(annotated);
+    console.log(spans);
+    const resultDiv = document.getElementById("spanDiv");
+    spans.map(span => resultDiv.appendChild(span));
 }
 
 function createAnnotatedTextSpans(annotated) {
-    const {text, annos, token} = annotated;
-    let spans = []
-    let subText = text
-    if(annos.length != token.length){
-        console.log("length of token and annos dont match")
+    const {text, posAnnos, token} = annotated;
+    let spans = [];
+    let subText = text;
+    if(posAnnos.length != token.length){
+        console.log("length of token and annos dont match");
     }
     for(let i = 0; i<token.length; i++){
-        const indexOfToken = subText.indexOf(token[i])
+        const indexOfToken = subText.indexOf(token[i]);
         if(indexOfToken > 0){
             const wordSpan = document.createElement("span");
-            wordSpan.innerText = subText.substr(0, indexOfToken+1)
-            spans.push(wordSpan)
+            const spanText = subText.substr(0, indexOfToken);
+            wordSpan.innerText = spanText;
+            spans.push(wordSpan);
         }
         const wordSpan = document.createElement("span");
-        wordSpan.innerText = subText.substr(indexOfToken, token[i].length)
-        wordSpan.style="background-color: "+tagColors[annos[i]]
-        spans.push(wordSpan)
-        subText = subText.substr(indexOfToken.length)
+        const spanText = subText.substr(indexOfToken, token[i].length);
+        wordSpan.innerText = spanText;
+        wordSpan.onmouseover= function(ev) {showTagInfo(posAnnos[i], ev)};
+        wordSpan.onmouseout = function (ev) {hideTagInfo(ev)}
+        wordSpan.style="background-color: "+tagColors[posAnnos[i]];
+        spans.push(wordSpan);
+        const add = indexOfToken+token[i].length
+        subText = subText.substr(add);
     }
-    return spans
+    const wordSpan = document.createElement("span");
+    wordSpan.innerText = subText;
+    spans.push(wordSpan);
+    return spans;
+}
+
+function showTagInfo(tag, event) {
+
+    if(tagDescriptions[tag] == undefined){
+        return ;
+    }
+
+    const tagDescription = document.getElementById("tagDescription")
+    tagDescription.innerText = tagDescriptions[tag]
+
+    const tagName = document.getElementById("tagName")
+    tagName.innerText = ", tag: "+tag
+
+    const tipDiv = document.getElementById("posTagInfoTipDiv")
+    const offset = $(event.target).offset();
+    const height = $(event.target).outerHeight();
+    const color = $(event.target).css("background-color");
+    $(tipDiv).css("display", "block")
+    $(tipDiv).offset({
+        'left': offset.left
+    });
+    $(tipDiv).offset({
+        'top': offset.top + height
+    });
+    $(tipDiv).width('10em')
+    $(tipDiv).css("background-color", color);
+}
+
+function hideTagInfo(ev){
+    $(document.getElementById("posTagInfoTipDiv")).css("display", "none");
 }

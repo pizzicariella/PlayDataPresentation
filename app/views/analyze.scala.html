@@ -17,12 +17,20 @@
         <article>
             <h1>Text analysieren</h1>
             <p>Hier einfach einen beliebigen Text einfügen und auf "Analysieren" drücken</p>
-            @helper.form(action = helper.CSRF(routes.HomeController.validateTextForm())){
-                @helper.textarea(textForm("text"))
-                <div class="formActions">
-                    <button type="submit">Analysieren</button>
+                @helper.form(action = helper.CSRF(routes.HomeController.validateTextForm())){
+                    @helper.textarea(textForm("text"))
+                    <div class="formActions">
+                        <button type="submit">Analysieren</button>
+                    </div>
+                }
+            <div id="annotationResults">
+                <div id="spanDiv"></div>
+                <div id="posTagTipTab">
+                    <div id="posTagInfoTipDiv">
+                        <p><span><b id="tagDescription"></b></span><span id="tagName"></span></p>
+                    </div>
                 </div>
-            }
+            </div>
         </article>
     </div>
 </section>
