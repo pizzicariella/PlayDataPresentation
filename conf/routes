@@ -7,18 +7,20 @@
 GET     /                           controllers.HomeController.index
 GET     /corpus                     controllers.HomeController.corpus
 GET     /analyze                    controllers.HomeController.analyze
-#GET    /analyze/text               controllers.HomeController.analyzeText
+POST    /analyze/text               controllers.HomeController.validateTextForm
+GET     /analyze/annotated          controllers.HomeController.annotatedText
 GET     /info                       controllers.HomeController.info
 GET     /corpus/articles            controllers.AnnotatedArticleController.articleList
 GET     /corpus/test/articles       controllers.AnnotatedArticleController.inMemoryArticleList
 # Javascript routing
-GET     /jsRoutes                   controllers.AnnotatedArticleController.jsRoutes
+GET     /javascriptRoutes           controllers.AnnotatedArticleController.javascriptRoutes
 # An example controller showing how to use dependency injection
 GET     /count                      controllers.CountController.count
 # An example controller showing how to write asynchronous code
 GET     /message                    controllers.AsyncController.message
 
 # Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
+#GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
+GET     /assets/*file               controllers.Assets.at(path="/public", file)
 
       

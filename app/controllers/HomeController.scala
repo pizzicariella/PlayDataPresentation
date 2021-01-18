@@ -1,16 +1,21 @@
 package controllers
 
+import entities.AnnotatedToken
+
 import javax.inject._
 import play.api.mvc._
 import play.api.data._
 import play.api.data.Forms._
 import play.api.data.validation.Constraints._
 import play.api.i18n.I18nSupport
-
+import play.api.libs.json.Json
 import play.api.routing.JavaScriptReverseRouter
 import play.mvc.Http.MimeTypes
+import services.Annotator
 
 import scala.concurrent.ExecutionContext
+
+case class TextToTag(text: String)
 
 /**
  * This controller creates an `Action` to handle HTTP requests to the
@@ -18,10 +23,12 @@ import scala.concurrent.ExecutionContext
  */
 @Singleton
 class HomeController @Inject()(implicit ec: ExecutionContext,
-                               cc: ControllerComponents) extends AbstractController(cc) with I18nSupport {
+                               cc: MessagesControllerComponents,
+                               annotator: Annotator) extends MessagesAbstractController(cc) {
 
-
-  val textForm = Form(single("text" -> nonEmptyText))
+  var textForm = Form(mapping("text" -> text)(TextToTag.apply)(TextToTag.unapply))
+  var at: AnnotatedToken = null
+  var loadAnnos: String = "f"
   /**
    * Create an Action to render an HTML page with a welcome message.
    * The configuration in the `routes` file means that this method
@@ -36,23 +43,30 @@ class HomeController @Inject()(implicit ec: ExecutionContext,
     Ok(views.html.corpus())
   }
 
-  def analyze = Action { implicit request =>
-    Ok(views.html.analyze(textForm))
+  def analyze() = Action { implicit request =>
+    Ok(views.html.analyze(textForm, loadAnnos))
   }
 
-  def analyzeText = Action { implicit request =>
-
-    //val textValue = textForm.bind(Map("text" -> "testText")).get
+  def validateTextForm = Action { implicit request =>
     textForm.bindFromRequest.fold(
-      hasErrors => {
-        //TODO handle errors
-        BadRequest(views.html.analyze(textForm))
-    },
-      textData => {
-        //TODO
-        Ok(views.html.analyze(textForm))
-      }
+      formWithErrors => BadRequest(views.html.analyze(formWithErrors, "f")),
+        data => {
+          //TODO avoid vars and directly call views?
+          at = annotator.annotate(data.text)
+          val filledForm = textForm.fill(TextToTag(data.text))
+          textForm = filledForm
+          loadAnnos = "t"
+          //val filledForm = textForm.fill(TextToTag(test))
+          //Redirect(routes.HomeController.analyze(filledForm))
+          annotatedText
+          //Ok(views.html.analyze(filledForm))
+          Redirect(routes.HomeController.analyze())
+        }
     )
+  }
+
+  def annotatedText() = Action { implicit request =>
+    Ok(Json.toJson(at))
   }
 
   def info = Action {
