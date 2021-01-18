@@ -8,31 +8,49 @@ const tagColors = {ADJ: "#A1CE5E", ADP: "#FACF63", ADV: "#969A52", AUX: "#FBAF5F
     PART: "#C5AB89", PRON: "#FFB6AD", PROPN: "#00919C", PUNCT: "white", SCONJ: "#CCC1DB",
     VERB: "#F68B69", X: "#C8C9D0"};
 
+function removeTextLabel(){
+    const labelList = document.getElementsByTagName("label");
+    labelList[0].remove();
+}
+
+function removeTextAreaMargin(){
+    const ddList = document.getElementsByTagName("dd");
+    ddList[0].style.marginLeft = "0em";
+}
+
 function start(arg) {
     return function (){
+        removeTextLabel();
+        removeTextAreaMargin();
         if(arg == "t"){
             jsRoutes.controllers.HomeController.annotatedText().ajax({
                 success: function (result){
-                    annotateText(result)
+                    annotateText(result);
                 },
                 failure: function (err){
-                    console.log("there was an error")
+                    console.log("there was an error");
                 }
             });
         } else {
-            console.log("nothing to display")
-            return
+            console.log("nothing to display");
+            return;
         }
     }
 }
 
 function annotateText(annotated) {
+    const heading = document.getElementById("resultHeading");
+    heading.innerText = "Ergebnis";
     const spans = createAnnotatedTextSpans(annotated);
-    console.log(spans);
     const resultDiv = document.getElementById("spanDiv");
     spans.map(span => resultDiv.appendChild(span));
+    const textField = document.getElementById("text_field");
+    $(resultDiv).scrollTop = textField.getBoundingClientRect.top;
+    console.log(resultDiv.offsetTop);
+    console.log(textField.offsetTop);
 }
 
+//TODO sometimes funny effects because of Normalizer (eg - is deleted )
 function createAnnotatedTextSpans(annotated) {
     const {text, posAnnos, token} = annotated;
     let spans = [];
@@ -94,3 +112,4 @@ function showTagInfo(tag, event) {
 function hideTagInfo(ev){
     $(document.getElementById("posTagInfoTipDiv")).css("display", "none");
 }
+
