@@ -18,7 +18,6 @@ libraryDependencies ++= Seq(
   "com.johnsnowlabs.nlp" %% "spark-nlp" % "2.6.2",
   "com.johnsnowlabs.nlp" %% "spark-nlp-gpu" % "2.6.2",
   "org.apache.spark" %% "spark-mllib" % "2.4.7",
-  //"org.apache.spark" %% "spark-sql" % "2.4.7"
   "com.fasterxml.jackson.module" % "jackson-module-scala_2.11" % "2.8.8"
 )
 

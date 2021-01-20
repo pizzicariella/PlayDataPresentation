@@ -2,7 +2,7 @@ package services
 
 import com.google.inject.ImplementedBy
 import com.johnsnowlabs.nlp.LightPipeline
-import entities.{AnnotatedArticle, AnnotatedToken}
+import entities.AnnotatedToken
 import org.apache.spark.ml.PipelineModel
 import org.apache.spark.sql.SparkSession
 
@@ -16,11 +16,12 @@ trait Annotator {
 @Singleton
 class PosPipeAnnotator extends Annotator {
 
-  //TODO initialize sc earlier, this is super slow
+  //TODO lazy creation. better to create eagerly on app start up?
   val sc: SparkSession = SparkSession
     .builder()
     .appName("PlayDataPresentation")
     .master("local[*]")
+    .config("spark.testing.memory", "2147480000")
     .getOrCreate()
 
 

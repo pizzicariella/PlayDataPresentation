@@ -44,10 +44,6 @@ function annotateText(annotated) {
     const spans = createAnnotatedTextSpans(annotated);
     const resultDiv = document.getElementById("spanDiv");
     spans.map(span => resultDiv.appendChild(span));
-    const textField = document.getElementById("text_field");
-    $(resultDiv).scrollTop = textField.getBoundingClientRect.top;
-    console.log(resultDiv.offsetTop);
-    console.log(textField.offsetTop);
 }
 
 //TODO sometimes funny effects because of Normalizer (eg - is deleted )

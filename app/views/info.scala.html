@@ -1,11 +1,24 @@
 @()
 @main("About") {
-    <section id="content">
-        <div>
-            <article>
-                <h1>Mehr Infos unter:</h1>
-                <p> <a href="https://www.spox.com/de/index.html">Spox.com</a> </p>
-            </article>
+    <section id="content" >
+        <div class="w3-main" style="margin-left:20px">
+            <div class = "w3-container">
+                <article class="w3-row w3-padding-64">
+                    <h1>Infos zum Projekt</h1>
+                    <h2>News Corpus</h2>
+                    <p>Der verwendete Corpus stammt aus dem Projekt <i>I-News Pipeline</i> und enthält Zeitungsartikel
+                    drei verschiedener Online Zeitungen: <i>taz.de</i>, <i>sueddeutsche-zeitung.de</i> und
+                    <i>heise.de</i></p>
+                    <h2>Annotationen</h2>
+                    <p>Das Pipeline Model wurde mithilfe von Spark NLP trainiert. Anhand des Models wurden die News
+                    Artikel auch annotiert. Das annotieren innerhalb des Anwendung basiert auf eben diesen Model.
+                    Allerdings wird hier zum trainieren eine Spark NLP LightPipeline verwendet.</p>
+                    <h2>Projekt Code</h2>
+                    <!-- TODO make repos public and insert link -->
+                    <p> <a href="https://github.com/pizzicariella/POSPipelineGerman">Spark NLP Projekt</a> </p>
+                    <p> <a href="https://github.com/pizzicariella/PlayDataPresentation">Play Web Projekt</a> </p>
+                </article>
+            </div>
         </div>
     </section>
 }
