@@ -38,7 +38,7 @@ class AnnotatedArticleController @Inject()(cc: ControllerComponents, val reactiv
   }
 
   def inMemoryArticleList = Action { implicit request =>
-    val path = "resources/annotatedArticles.json"
+    val path = "conf/resources/annotatedArticles.json"
 
     val jsonString = readJsonFile(path).reduce(_+_)
     val jsResult = Json.parse(jsonString).validate[Seq[AnnotatedArticle]]

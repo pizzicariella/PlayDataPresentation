@@ -1,21 +1,15 @@
 package controllers
 
-import entities.AnnotatedToken
+import entities.{AnnotatedToken, TextToTag}
 
 import javax.inject._
 import play.api.mvc._
 import play.api.data._
 import play.api.data.Forms._
-import play.api.data.validation.Constraints._
-import play.api.i18n.I18nSupport
 import play.api.libs.json.Json
-import play.api.routing.JavaScriptReverseRouter
-import play.mvc.Http.MimeTypes
 import services.Annotator
 
 import scala.concurrent.ExecutionContext
-
-case class TextToTag(text: String)
 
 /**
  * This controller creates an `Action` to handle HTTP requests to the
@@ -56,10 +50,7 @@ class HomeController @Inject()(implicit ec: ExecutionContext,
           val filledForm = textForm.fill(TextToTag(data.text))
           textForm = filledForm
           loadAnnos = "t"
-          //val filledForm = textForm.fill(TextToTag(test))
-          //Redirect(routes.HomeController.analyze(filledForm))
           annotatedText
-          //Ok(views.html.analyze(filledForm))
           Redirect(routes.HomeController.analyze())
         }
     )
