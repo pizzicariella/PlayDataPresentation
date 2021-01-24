@@ -20,7 +20,7 @@ class HomeController @Inject()(implicit ec: ExecutionContext,
                                cc: MessagesControllerComponents,
                                annotator: Annotator) extends MessagesAbstractController(cc) {
 
-  var textForm = Form(mapping("text" -> text)(TextToTag.apply)(TextToTag.unapply))
+  var textForm = Form(mapping("text" -> nonEmptyText)(TextToTag.apply)(TextToTag.unapply))
   var at: AnnotatedToken = null
   var loadAnnos: String = "f"
   /**

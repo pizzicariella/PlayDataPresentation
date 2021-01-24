@@ -11,6 +11,8 @@ const tagColors = {ADJ: "#A1CE5E", ADP: "#FACF63", ADV: "#969A52", AUX: "#FBAF5F
 function removeTextLabel(){
     const labelList = document.getElementsByTagName("label");
     labelList[0].remove();
+    const requiredEl = document.getElementsByClassName("info");
+    requiredEl[0].remove();
 }
 
 function removeTextAreaMargin(){
