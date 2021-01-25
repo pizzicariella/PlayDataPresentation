@@ -1,8 +1,6 @@
 package controllers
 
-import java.io.{File, FileInputStream}
 import entities.AnnotatedArticle
-
 import javax.inject.Inject
 import play.api.libs.json.{JsObject, _}
 import play.api.mvc._
@@ -11,12 +9,9 @@ import play.modules.reactivemongo.{MongoController, ReactiveMongoApi, ReactiveMo
 import play.mvc.Http.MimeTypes
 import reactivemongo.api.{Cursor, ReadPreference}
 import reactivemongo.play.json._
-
 import reactivemongo.play.json.collection.JSONCollection
-
+import utils.JsonReader.readJsonFile
 import scala.concurrent.{ExecutionContext, Future}
-import scala.io.Source
-
 
 class AnnotatedArticleController @Inject()(cc: ControllerComponents, val reactiveMongoApi: ReactiveMongoApi)
   extends AbstractController(cc) with MongoController with ReactiveMongoComponents {
@@ -37,13 +32,13 @@ class AnnotatedArticleController @Inject()(cc: ControllerComponents, val reactiv
     futureArticleList.map { article => Ok(Json.toJson(article)) }
   }
 
-  def inMemoryArticleList = Action { implicit request =>
+  def inMemoryArticleList() = Action { implicit request =>
     val path = "conf/resources/annotatedArticles.json"
 
     val jsonString = readJsonFile(path).reduce(_+_)
     val jsResult = Json.parse(jsonString).validate[Seq[AnnotatedArticle]]
     jsResult.fold(
-      error => {Ok(error.toString())},
+      error => {InternalServerError},//Ok(error.toString())},
       success => {Ok(Json.toJson(success))}
     )
   }
@@ -53,32 +48,6 @@ class AnnotatedArticleController @Inject()(cc: ControllerComponents, val reactiv
     (routes.javascript.AnnotatedArticleController.articleList,
       routes.javascript.AnnotatedArticleController.inMemoryArticleList,
       routes.javascript.HomeController.annotatedText)).as(MimeTypes.JAVASCRIPT)
-  }
-
-  def parseJsonFromFile(path: String): List[AnnotatedArticle] = {
-    val file = new File(path)
-    val stream = new FileInputStream(file)
-    val articles = try {
-      Json.parse(stream).as[List[AnnotatedArticle]]
-    } finally {
-      stream.close()
-    }
-    println(articles)
-    articles
-  }
-
-  //TODO refactor to utils
-  def readJsonFile(path: String): List[String] = {
-    val bufferedSource = Source.fromFile(path)
-    val lines = bufferedSource.getLines().toList
-    bufferedSource.close()
-    lines
-  }
-
-  //TODO refactor to utils
-  def parseJson(line: String): AnnotatedArticle = {
-    val json = Json.parse(line)
-    json.as[AnnotatedArticle]
   }
 }
 

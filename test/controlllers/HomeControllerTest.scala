@@ -10,7 +10,6 @@ import play.api.test.FakeRequest
 import play.api.mvc.{AnyContentAsEmpty, DefaultActionBuilder, DefaultMessagesActionBuilderImpl, DefaultMessagesControllerComponents, MessagesControllerComponents, Result, Results}
 import play.api.test.Helpers.baseApplicationBuilder.injector
 import services.PosPipeAnnotator
-
 import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
 
@@ -28,9 +27,7 @@ class HomeControllerTest extends PlaySpec with Results{
       val stat = status(result)
       stat mustBe 200
     }
-  }
 
-  "Index Page" should {
     "be html" in {
       val result: Future[Result] = controller.index().apply(FakeRequest())
       val content = contentType(result)
@@ -44,9 +41,7 @@ class HomeControllerTest extends PlaySpec with Results{
       val stat = status(result)
       stat mustBe 200
     }
-  }
 
-  "Corpus Page" should {
     "be html" in {
       val result: Future[Result] = controller.corpus().apply(FakeRequest())
       val content = contentType(result)
@@ -60,10 +55,8 @@ class HomeControllerTest extends PlaySpec with Results{
       val stat = status(result)
       stat mustBe 200
     }
-  }
 
-  "Analyze Page" should {
-    "be valid" in {
+    "be html" in {
       val result: Future[Result] = controller.analyze().apply(addCSRFToken(FakeRequest()))
       val content = contentType(result)
       content mustBe Some("text/html")
@@ -76,9 +69,7 @@ class HomeControllerTest extends PlaySpec with Results{
       val stat = status(result)
       stat mustBe 200
     }
-  }
 
-  "Info Page" should {
     "be html" in {
       val result: Future[Result] = controller.info().apply(FakeRequest())
       val content = contentType(result)
@@ -94,9 +85,7 @@ class HomeControllerTest extends PlaySpec with Results{
       val content = contentType(result)
       content mustBe Some("text/html")
     }
-  }
 
-  "ValidateTextForm" should {
     "redirect to analyze page" in {
       val result: Future[Result] = controller
         .validateTextForm()
@@ -106,9 +95,7 @@ class HomeControllerTest extends PlaySpec with Results{
       redirect mustBe Some("/analyze")
       stat mustBe 303
     }
-  }
 
-  "ValidateTextForm with empty text" should {
     "return BAD_REQUEST" in {
       val result: Future[Result] = controller
         .validateTextForm()
@@ -127,9 +114,7 @@ class HomeControllerTest extends PlaySpec with Results{
       val stat = status(result)
       stat mustBe 200
     }
-  }
 
-  "AnnotatedText" should {
     "contain valid json" in {
       val posAnnos = Seq("PRON", "AUX", "DET", "NOUN")
       val token = Seq("Dies", "ist", "ein", "Test")
