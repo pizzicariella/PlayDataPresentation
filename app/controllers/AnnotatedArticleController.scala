@@ -38,7 +38,7 @@ class AnnotatedArticleController @Inject()(cc: ControllerComponents, val reactiv
     val jsonString = readJsonFile(path).reduce(_+_)
     val jsResult = Json.parse(jsonString).validate[Seq[AnnotatedArticle]]
     jsResult.fold(
-      error => {InternalServerError},//Ok(error.toString())},
+      error => {Ok(error.toString())},
       success => {Ok(Json.toJson(success))}
     )
   }
