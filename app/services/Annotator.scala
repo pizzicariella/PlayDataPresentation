@@ -22,6 +22,8 @@ class PosPipeAnnotator extends Annotator {
     .appName("PlayDataPresentation")
     .master("local[*]")
     .config("spark.testing.memory", "2147480000")
+    .config("spark.driver.host", "127.0.0.1")
+    .config("spark.driver.bindAddress", "127.0.0.1")
     //.config("spark.driver.memory", "2g")
     //.config("spark.memory.offHeap.enabled",true)
     //.config("spark.memory.offHeap.size","2g")
