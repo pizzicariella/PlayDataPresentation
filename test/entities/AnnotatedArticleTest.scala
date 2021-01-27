@@ -1,7 +1,7 @@
 package entities
 
 import org.scalatestplus.play.PlaySpec
-import play.api.libs.json.{JsError, Json}
+import play.api.libs.json.Json
 
 class AnnotatedArticleTest extends PlaySpec{
 
