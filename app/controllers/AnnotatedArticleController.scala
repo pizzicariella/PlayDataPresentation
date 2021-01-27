@@ -10,7 +10,7 @@ import play.mvc.Http.MimeTypes
 import reactivemongo.api.{Cursor, ReadPreference}
 import reactivemongo.play.json._
 import reactivemongo.play.json.collection.JSONCollection
-import utils.JsonReader.readJsonFile
+import utils.FileReader.readFile
 import scala.concurrent.{ExecutionContext, Future}
 
 class AnnotatedArticleController @Inject()(cc: ControllerComponents, val reactiveMongoApi: ReactiveMongoApi)
@@ -35,7 +35,7 @@ class AnnotatedArticleController @Inject()(cc: ControllerComponents, val reactiv
   def inMemoryArticleList() = Action { implicit request =>
     val path = "conf/resources/annotatedArticles.json"
 
-    val jsonString = readJsonFile(path).reduce(_+_)
+    val jsonString = readFile(path).reduce(_+_)
     val jsResult = Json.parse(jsonString).validate[Seq[AnnotatedArticle]]
     jsResult.fold(
       error => {Ok(error.toString())},
