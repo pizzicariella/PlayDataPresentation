@@ -12,11 +12,11 @@ const tagColors = {ADJ: "#A1CE5E", ADP: "#FACF63", ADV: "#969A52", AUX: "#FBAF5F
 $(document).ready(function () {
     jsRoutes.controllers.AnnotatedArticleController.articleList().ajax({
         success: function (result){
-            loadedArticles = result
-            result.forEach(article => insertArticle(article))
+            loadedArticles = result;
+            result.forEach(article => insertArticle(article));
         },
         failure: function (err){
-            console.log("there was an error")
+            console.log("there was an error");
         }
     });
 });
@@ -34,7 +34,7 @@ function showPosAnnotations(articleId) {
     articleTitle.innerText = "";
     articleIntro.innerText = "";
     articleText.innerText = "";
-    articleTitle.setAttribute("class", "w3-main")
+    articleTitle.setAttribute("class", "w3-main");
     let i = 0;
     let nextP = false;
     while (i<wordSpans.length && !nextP){
@@ -69,24 +69,24 @@ function showTagInfo(tag, articleId, event) {
     }
     const currentArticle = document.getElementById(articleId);
 
-    const tagDescription = currentArticle.querySelector("#tagDescription")
-    tagDescription.innerText = tagDescriptions[tag]
+    const tagDescription = currentArticle.querySelector("#tagDescription");
+    tagDescription.innerText = tagDescriptions[tag];
 
-    const tagName = currentArticle.querySelector("#tagName")
-    tagName.innerText = ", tag: "+tag
+    const tagName = currentArticle.querySelector("#tagName");
+    tagName.innerText = ", tag: "+tag;
 
-    const tipDiv = currentArticle.querySelector("#posTagInfoTipDiv")
+    const tipDiv = currentArticle.querySelector("#posTagInfoTipDiv");
     const offset = $(event.target).offset();
     const height = $(event.target).outerHeight();
     const color = $(event.target).css("background-color");
-    $(tipDiv).show()
+    $(tipDiv).show();
     $(tipDiv).offset({
         'left': offset.left
     });
     $(tipDiv).offset({
         'top': offset.top + height
     });
-    $(tipDiv).width('10em')
+    $(tipDiv).width('10em');
     $(tipDiv).css("background-color", color);
 }
 
@@ -99,32 +99,32 @@ const convertPosAnnotationToWordSpan = (annotation, text, articleId) => {
     const {begin, end, tag} = annotation;
     const wordSpan = document.createElement("span");
     wordSpan.innerText = text.substring(begin, end+1);
-    wordSpan.onmouseover= function(ev) {showTagInfo(tag, articleId, ev)};
-    wordSpan.onmouseout = function (ev) {hideTagInfo(articleId, ev)}
-    wordSpan.style="background-color: "+tagColors[tag]
+    wordSpan.onmouseover= function(ev) {showTagInfo(tag, articleId, ev);};
+    wordSpan.onmouseout = function (ev) {hideTagInfo(articleId, ev);};
+    wordSpan.style="background-color: "+tagColors[tag];
     return wordSpan;
 }
 
 function completeAnnotations(annotations, textLength) {
     let completeAnnos = [];
     for(let i=0; i<annotations.length; i++){
-        completeAnnos.push(annotations[i])
-        const {begin, end, tag} = annotations[i]
-        const endPrev = end
+        completeAnnos.push(annotations[i]);
+        const {begin, end, tag} = annotations[i];
+        const endPrev = end;
         if(i != annotations.length-1){
-            let {begin, end, tag} = annotations[i+1]
+            let {begin, end, tag} = annotations[i+1];
             if(begin > endPrev+1){
-                const empyAnno = {begin: endPrev+1, end: begin-1, tag: "empy"}
-                completeAnnos.push(empyAnno)
+                const empyAnno = {begin: endPrev+1, end: begin-1, tag: "empy"};
+                completeAnnos.push(empyAnno);
             }
         } else {
             if(textLength-1 > endPrev){
-                const empyAnno = {begin: endPrev+1, end: textLength-1, tag: "empy"}
-                completeAnnos.push(empyAnno)
+                const empyAnno = {begin: endPrev+1, end: textLength-1, tag: "empy"};
+                completeAnnos.push(empyAnno);
             }
         }
     }
-    return completeAnnos
+    return completeAnnos;
 }
 
 const insertArticle = (articleInfo) => {
@@ -134,8 +134,8 @@ const insertArticle = (articleInfo) => {
 
     const articleTemplate = document.getElementById("articleTemplate").content;
     const article = articleTemplate.cloneNode(true);
-    const articleElement = article.getElementById("setToArticleId")
-    articleElement.id = _id
+    const articleElement = article.getElementById("setToArticleId");
+    articleElement.id = _id;
 
     const articleTitle = article.getElementById("articleTitle");
     articleTitle.innerText = textAttribs[0];
@@ -161,7 +161,7 @@ const insertArticle = (articleInfo) => {
     articleReference.appendChild(dateSpan);
 
     const button = article.getElementById("showAnnotationsButton");
-    button.onclick = function () {showPosAnnotations(_id)}
+    button.onclick = function () {showPosAnnotations(_id);};
 
     createArticleInformation(tagPercentage, article);
 

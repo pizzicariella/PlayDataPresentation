@@ -33,11 +33,12 @@ function start(arg) {
                     console.log("there was an error");
                 }
             });
+            console.log("t");
         } else {
             console.log("nothing to display");
             return;
         }
-    }
+    };
 }
 
 function annotateText(annotated) {
@@ -67,11 +68,11 @@ function createAnnotatedTextSpans(annotated) {
         const wordSpan = document.createElement("span");
         const spanText = subText.substr(indexOfToken, token[i].length);
         wordSpan.innerText = spanText;
-        wordSpan.onmouseover= function(ev) {showTagInfo(posAnnos[i], ev)};
-        wordSpan.onmouseout = function (ev) {hideTagInfo(ev)}
+        wordSpan.onmouseover= function(ev) {showTagInfo(posAnnos[i], ev);};
+        wordSpan.onmouseout = function (ev) {hideTagInfo(ev);}
         wordSpan.style="background-color: "+tagColors[posAnnos[i]];
         spans.push(wordSpan);
-        const add = indexOfToken+token[i].length
+        const add = indexOfToken+token[i].length;
         subText = subText.substr(add);
     }
     const wordSpan = document.createElement("span");
@@ -83,27 +84,27 @@ function createAnnotatedTextSpans(annotated) {
 function showTagInfo(tag, event) {
 
     if(tagDescriptions[tag] == undefined){
-        return ;
+        return;
     }
 
-    const tagDescription = document.getElementById("tagDescription")
-    tagDescription.innerText = tagDescriptions[tag]
+    const tagDescription = document.getElementById("tagDescription");
+    tagDescription.innerText = tagDescriptions[tag];
 
-    const tagName = document.getElementById("tagName")
-    tagName.innerText = ", tag: "+tag
+    const tagName = document.getElementById("tagName");
+    tagName.innerText = ", tag: "+tag;
 
-    const tipDiv = document.getElementById("posTagInfoTipDiv")
+    const tipDiv = document.getElementById("posTagInfoTipDiv");
     const offset = $(event.target).offset();
     const height = $(event.target).outerHeight();
     const color = $(event.target).css("background-color");
-    $(tipDiv).css("display", "block")
+    $(tipDiv).css("display", "block");
     $(tipDiv).offset({
         'left': offset.left
     });
     $(tipDiv).offset({
         'top': offset.top + height
     });
-    $(tipDiv).width('10em')
+    $(tipDiv).width('10em');
     $(tipDiv).css("background-color", color);
 }
 

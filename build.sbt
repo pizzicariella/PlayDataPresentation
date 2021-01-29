@@ -6,6 +6,7 @@ lazy val `playdatapresentation` = (project in file(".")).enablePlugins(PlayScala
 
 resolvers += "scalaz-bintray" at "https://dl.bintray.com/scalaz/releases"
 resolvers += "Akka Snapshot Repository" at "https://repo.akka.io/snapshots/"
+resolvers ++= Seq("guava" at "https://mvnrepository.com/artifact/com.google.guava/guava")
       
 //scalaVersion := "2.12.2"
 scalaVersion := "2.11.12"
@@ -19,7 +20,6 @@ libraryDependencies ++= Seq(
   "com.johnsnowlabs.nlp" %% "spark-nlp-gpu" % "2.6.2",
   "org.apache.spark" %% "spark-mllib" % "2.4.7",
   "com.fasterxml.jackson.module" % "jackson-module-scala_2.11" % "2.8.8",
-
   "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.3" % "test"
 )
 
