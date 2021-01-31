@@ -28,11 +28,11 @@ class AnnotatedArticleControllerTest extends PlaySpec{
       stat mustBe 200
     }
 
-    "contain valid json List of size 99" in {
+    "contain valid json List of size 9" in {
       val result: Future[Result] = controller.inMemoryArticleList().apply(FakeRequest())
       val json = contentAsJson(result)
       val jsonList = json.as[Seq[AnnotatedArticle]]
-      jsonList.size mustBe 99
+      jsonList.size mustBe 9
     }
   }
 }

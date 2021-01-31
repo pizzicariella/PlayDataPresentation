@@ -5,9 +5,11 @@ import play.api.libs.json.Json
 
 class AnnotatedTextTest extends PlaySpec{
 
-  val exampleAnnotatedToken = AnnotatedText("Dies ist ein Test Text",
+  val exampleAnnotatedToken = AnnotatedText(
+    "Dies ist ein Test Text",
+    Seq("Dies", "ist", "ein", "Test", "Text"),
     Seq("PRON", "AUX", "DET", "NOUN", "NOUN"),
-    Seq("Dies", "ist", "ein", "Test", "Text"))
+    Seq("dies", "sein", "ein", "Test", "Text"))
 
   val exampleAnnotatedTokenString = "{\"text\":\"Dies ist ein Test Text\",\"posAnnos\":[\"PRON\",\"AUX\",\"DET\"," +
     "\"NOUN\",\"NOUN\"],\"token\":[\"Dies\",\"ist\",\"ein\",\"Test\",\"Text\"]}"

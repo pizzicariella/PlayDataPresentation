@@ -5,10 +5,15 @@ import play.api.libs.json.Json
 
 class AnnotatedArticleTest extends PlaySpec{
 
-  val exampleArticle = AnnotatedArticle("testId", "www.test.de", 1575834314135L, "Dies ist ein Test Text",
+  val exampleArticle = AnnotatedArticle(
+    "testId",
+    "www.test.de",
+    1575834314135L,
+    "Dies ist ein Test Text",
     Seq(PosAnnotation(0, 3, "PRON"), PosAnnotation(5, 7, "AUX"), PosAnnotation(9, 11, "DET"),
-      PosAnnotation(13, 16, "NOUN"), PosAnnotation(18, 21, "NOUN")), Seq(TagPercentage("PRON", 0.2),
-      TagPercentage("AUX", 0.2), TagPercentage("DET", 0.2), TagPercentage("NOUN", 0.4)))
+      PosAnnotation(13, 16, "NOUN"), PosAnnotation(18, 21, "NOUN")),
+    Seq(Lemma(0, 3, "dies"), Lemma(5, 7, "sein"), Lemma(9, 11, "ein"), Lemma(13, 16, "Test"), Lemma(18, 21, "Text")),
+    Seq(TagPercentage("PRON", 0.2), TagPercentage("AUX", 0.2), TagPercentage("DET", 0.2), TagPercentage("NOUN", 0.4)))
 
   val exampleArticleString = "{\"_id\":\"testId\",\"longUrl\":\"www.test.de\",\"crawlTime\":" +
     "{\"$date\":1575834314135},\"text\":\"Dies ist ein Test Text\",\"annotationsPos\":[" +
