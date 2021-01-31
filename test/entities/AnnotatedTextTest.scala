@@ -11,8 +11,9 @@ class AnnotatedTextTest extends PlaySpec{
     Seq("PRON", "AUX", "DET", "NOUN", "NOUN"),
     Seq("dies", "sein", "ein", "Test", "Text"))
 
-  val exampleAnnotatedTokenString = "{\"text\":\"Dies ist ein Test Text\",\"posAnnos\":[\"PRON\",\"AUX\",\"DET\"," +
-    "\"NOUN\",\"NOUN\"],\"token\":[\"Dies\",\"ist\",\"ein\",\"Test\",\"Text\"]}"
+  val exampleAnnotatedTokenString = "{\"text\":\"Dies ist ein Test Text\",\"token\":[\"Dies\",\"ist\",\"ein\"," +
+    "\"Test\",\"Text\"],\"posAnnos\":[\"PRON\",\"AUX\",\"DET\",\"NOUN\",\"NOUN\"],\"lemmas\":[\"dies\",\"sein\"," +
+    "\"ein\",\"Test\",\"Text\"]}"
 
   "AnnotatedToken Json Format" should {
     "create correct object" in {

@@ -19,8 +19,11 @@ class AnnotatedArticleTest extends PlaySpec{
     "{\"$date\":1575834314135},\"text\":\"Dies ist ein Test Text\",\"annotationsPos\":[" +
     "{\"begin\":0,\"end\":3,\"tag\":\"PRON\"},{\"begin\":5,\"end\":7,\"tag\":\"AUX\"}," +
     "{\"begin\":9,\"end\":11,\"tag\":\"DET\"},{\"begin\":13,\"end\":16,\"tag\":\"NOUN\"}," +
-    "{\"begin\":18,\"end\":21,\"tag\":\"NOUN\"}],\"tagPercentage\":[{\"tag\":\"PRON\",\"percentage\":0.2}," +
-    "{\"tag\":\"AUX\",\"percentage\":0.2},{\"tag\":\"DET\",\"percentage\":0.2},{\"tag\":\"NOUN\",\"percentage\":0.4}]}"
+    "{\"begin\":18,\"end\":21,\"tag\":\"NOUN\"}],\"lemmas\":[{\"beginToken\":0,\"endToken\":3,\"result\":\"dies\"}," +
+    "{\"beginToken\":5,\"endToken\":7,\"result\":\"sein\"},{\"beginToken\":9,\"endToken\":11,\"result\":\"ein\"}," +
+    "{\"beginToken\":13,\"endToken\":16,\"result\":\"Test\"},{\"beginToken\":18,\"endToken\":21,\"result\":\"Text\"}]," +
+    "\"tagPercentage\":[{\"tag\":\"PRON\",\"percentage\":0.2},{\"tag\":\"AUX\",\"percentage\":0.2}," +
+    "{\"tag\":\"DET\",\"percentage\":0.2},{\"tag\":\"NOUN\",\"percentage\":0.4}]}"
 
   val exampleNonArticleString = "{\"id\":\"testId\",\"longUrl\":\"www.test.de\",\"crawlTime\":" +
     "1575834314135,\"text\":\"Dies ist ein Test Text\",\"annotationsPos\":[" +
