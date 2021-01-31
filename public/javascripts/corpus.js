@@ -1,12 +1,12 @@
 let loadedArticles = [];
 const tagDescriptions = {ADJ: "Adjektiv", ADP: "Präposition", ADV: "Adverb", AUX: "Hilfsverb",
     CCONJ: "Konjunktion (koordinierend)", DET: "Artikel", INTJ: "Interjektion", NOUN: "Nomen", NUM: "Zahlwort",
-    PART: "Partikel", PRON: "Pronomen", PROPN: "Eigenname", PUNCT: "Punctuation", SCONJ: "Konjunktion (subordinierend)",
+    PART: "Partikel", PRON: "Pronomen", PROPN: "Eigenname", SCONJ: "Konjunktion (subordinierend)",
     VERB: "Verb", X: "sonstige Wortart"};
 
 const tagColors = {ADJ: "#A1CE5E", ADP: "#FACF63", ADV: "#969A52", AUX: "#FBAF5F",
     CCONJ: "#CCC1DB", DET: "#AEC6CC", INTJ: "#B38E50", NOUN: "#1A86A8", NUM: "#D2EFDB",
-    PART: "#C5AB89", PRON: "#FFB6AD", PROPN: "#00919C", PUNCT: "white", SCONJ: "#CCC1DB",
+    PART: "#C5AB89", PRON: "#FFB6AD", PROPN: "#00919C", SCONJ: "#CCC1DB",
     VERB: "#F68B69", X: "#C8C9D0"};
 
 $(document).ready(function () {
@@ -24,9 +24,11 @@ $(document).ready(function () {
 
 function showPosAnnotations(articleId) {
     const articleInfo = loadedArticles.find(article => article._id === articleId);
-    const {_id, longUrl, crawlTime, text, annotationsPos} = articleInfo;
-    const completeTextAnnotated = completeAnnotations(annotationsPos, text.length);
-    const wordSpans = completeTextAnnotated.map(pos => convertPosAnnotationToWordSpan(pos, text, articleId));
+    //const {_id, longUrl, crawlTime, text, lemmas, annotationsPos} = articleInfo;
+    const {text, lemmas, annotationsPos} = articleInfo
+    const completeTextAnnotated = completeAnnotations(annotationsPos, lemmas, text.length);
+    const wordSpans = completeTextAnnotated.map(posAndLemma =>
+        convertPosAnnotationToWordSpan(posAndLemma, text, articleId));
     const article = document.getElementById(articleId);
     const articleTitle = article.querySelector("#articleTitle");
     const articleIntro = article.querySelector("#articleIntro");
@@ -62,7 +64,7 @@ function showPosAnnotations(articleId) {
     }
 }
 
-function showTagInfo(tag, articleId, event) {
+function showTagInfo(tag, lemma, articleId, event) {
 
     if(tagDescriptions[tag] == undefined){
         return ;
@@ -75,6 +77,9 @@ function showTagInfo(tag, articleId, event) {
     const tagName = currentArticle.querySelector("#tagName");
     tagName.innerText = ", tag: "+tag;
 
+    const lemmaSpan = currentArticle.querySelector("#lemma");
+    lemmaSpan.innerText = lemma;
+
     const tipDiv = currentArticle.querySelector("#posTagInfoTipDiv");
     const offset = $(event.target).offset();
     const height = $(event.target).outerHeight();
@@ -86,7 +91,7 @@ function showTagInfo(tag, articleId, event) {
     $(tipDiv).offset({
         'top': offset.top + height
     });
-    $(tipDiv).width('10em');
+    $(tipDiv).width('15em');
     $(tipDiv).css("background-color", color);
 }
 
@@ -95,32 +100,37 @@ function hideTagInfo(articleId, ev){
     $(currentArticle.querySelector("#posTagInfoTipDiv")).css("display", "none");
 }
 
-const convertPosAnnotationToWordSpan = (annotation, text, articleId) => {
-    const {begin, end, tag} = annotation;
+const convertPosAnnotationToWordSpan = (posAndLemma, text, articleId) => {
+    //const {begin, end, tag} = annotation;
+    const {pos, lemma} = posAndLemma;
+    const {begin, end, tag} = pos;
+    const {beginToken, endToken, result} = lemma;
     const wordSpan = document.createElement("span");
     wordSpan.innerText = text.substring(begin, end+1);
-    wordSpan.onmouseover= function(ev) {showTagInfo(tag, articleId, ev);};
+    wordSpan.onmouseover= function(ev) {showTagInfo(tag, result, articleId, ev);};
     wordSpan.onmouseout = function (ev) {hideTagInfo(articleId, ev);};
     wordSpan.style="background-color: "+tagColors[tag];
     return wordSpan;
 }
 
-function completeAnnotations(annotations, textLength) {
+function completeAnnotations(annotations, lemmas, textLength) {
     let completeAnnos = [];
     for(let i=0; i<annotations.length; i++){
-        completeAnnos.push(annotations[i]);
+        completeAnnos.push({pos: annotations[i], lemma: lemmas[i]});
         const {begin, end, tag} = annotations[i];
         const endPrev = end;
         if(i != annotations.length-1){
             let {begin, end, tag} = annotations[i+1];
             if(begin > endPrev+1){
                 const empyAnno = {begin: endPrev+1, end: begin-1, tag: "empy"};
-                completeAnnos.push(empyAnno);
+                const emptyLemma = {beginToken: endPrev+1, endToken: begin-1, result: "empty"};
+                completeAnnos.push({pos: empyAnno, lemma: emptyLemma});
             }
         } else {
             if(textLength-1 > endPrev){
                 const empyAnno = {begin: endPrev+1, end: textLength-1, tag: "empy"};
-                completeAnnos.push(empyAnno);
+                const emptyLemma = {beginToken: endPrev+1, endToken: textLength-1, result: "empty"}
+                completeAnnos.push({pos: empyAnno, lemma:emptyLemma});
             }
         }
     }
