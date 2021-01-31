@@ -16,7 +16,7 @@ $(document).ready(function () {
             result.forEach(article => insertArticle(article));
         },
         failure: function (err){
-            console.log("there was an error");
+            console.log("there was an error: "+err);
         }
     });
 });
@@ -66,7 +66,7 @@ function showPosAnnotations(articleId) {
 
 function showTagInfo(tag, lemma, articleId, event) {
 
-    if(tagDescriptions[tag] == undefined){
+    if(tagDescriptions[tag] === undefined){
         return ;
     }
     const currentArticle = document.getElementById(articleId);
@@ -104,7 +104,7 @@ const convertPosAnnotationToWordSpan = (posAndLemma, text, articleId) => {
     //const {begin, end, tag} = annotation;
     const {pos, lemma} = posAndLemma;
     const {begin, end, tag} = pos;
-    const {beginToken, endToken, result} = lemma;
+    const {result} = lemma;
     const wordSpan = document.createElement("span");
     wordSpan.innerText = text.substring(begin, end+1);
     wordSpan.onmouseover= function(ev) {showTagInfo(tag, result, articleId, ev);};
@@ -117,10 +117,10 @@ function completeAnnotations(annotations, lemmas, textLength) {
     let completeAnnos = [];
     for(let i=0; i<annotations.length; i++){
         completeAnnos.push({pos: annotations[i], lemma: lemmas[i]});
-        const {begin, end, tag} = annotations[i];
+        const {end} = annotations[i];
         const endPrev = end;
-        if(i != annotations.length-1){
-            let {begin, end, tag} = annotations[i+1];
+        if(i !== annotations.length-1){
+            let {begin} = annotations[i+1];
             if(begin > endPrev+1){
                 const empyAnno = {begin: endPrev+1, end: begin-1, tag: "empy"};
                 const emptyLemma = {beginToken: endPrev+1, endToken: begin-1, result: "empty"};
@@ -138,7 +138,7 @@ function completeAnnotations(annotations, lemmas, textLength) {
 }
 
 const insertArticle = (articleInfo) => {
-    const {_id, longUrl, crawlTime, text, annotationsPos, tagPercentage} = articleInfo;
+    const {_id, longUrl, crawlTime, text, tagPercentage} = articleInfo;
 
     const textAttribs = text.split("$§$");
 
@@ -188,11 +188,11 @@ function createArticleInformation(tagPercentage, article) {
         const percentageSpan = document.createElement("SPAN");
         let color = tagColors[tag];
         let description = tagDescriptions[tag];
-        if(color == undefined){
+        if(color === undefined){
             color = "darkgrey";
         }
         tagSpan.style = "background-color: "+color;
-        if(description == undefined){
+        if(description === undefined){
             description = "unbekannt";
         }
         tagSpan.innerText = tagDescriptions[tag]+" ("+tag+")";

@@ -38,7 +38,11 @@ class HomeController @Inject()(implicit ec: ExecutionContext,
   }
 
   def analyze() = Action { implicit request =>
-    Ok(views.html.analyze(textForm, loadAnnos))
+    val textFormToLoad = textForm
+    val loadAnnosToLoad = loadAnnos
+    textForm = textForm.fill(TextToTag(""))
+    loadAnnos = "f"
+    Ok(views.html.analyze(textFormToLoad, loadAnnosToLoad))
   }
 
   def validateTextForm = Action { implicit request =>

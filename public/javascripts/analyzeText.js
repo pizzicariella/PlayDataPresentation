@@ -30,13 +30,10 @@ function start(arg) {
                     annotateText(result);
                 },
                 failure: function (err){
-                    console.log("there was an error");
+                    console.log("there was an error: "+err);
                 }
             });
             console.log("t");
-        } else {
-            console.log("nothing to display");
-            return;
         }
     };
 }
@@ -49,25 +46,22 @@ function annotateText(annotated) {
     spans.map(span => resultDiv.appendChild(span));
 }
 
-//TODO sometimes funny effects because of Normalizer (eg - is deleted )
 function createAnnotatedTextSpans(annotated) {
     const {text, token, posAnnos, lemmas} = annotated;
     let spans = [];
     let subText = text;
-    if(posAnnos.length != token.length){
+    if(posAnnos.length !== token.length){
         console.log("length of token and annos dont match");
     }
     for(let i = 0; i<token.length; i++){
         const indexOfToken = subText.indexOf(token[i]);
         if(indexOfToken > 0){
             const wordSpan = document.createElement("span");
-            const spanText = subText.substr(0, indexOfToken);
-            wordSpan.innerText = spanText;
+            wordSpan.innerText = subText.substr(0, indexOfToken);
             spans.push(wordSpan);
         }
         const wordSpan = document.createElement("span");
-        const spanText = subText.substr(indexOfToken, token[i].length);
-        wordSpan.innerText = spanText;
+        wordSpan.innerText = subText.substr(indexOfToken, token[i].length);
         wordSpan.onmouseover= function(ev) {showTagInfo(posAnnos[i], lemmas[i], ev);};
         wordSpan.onmouseout = function (ev) {hideTagInfo(ev);}
         wordSpan.style="background-color: "+tagColors[posAnnos[i]];
@@ -83,7 +77,7 @@ function createAnnotatedTextSpans(annotated) {
 
 function showTagInfo(tag, lemma, event) {
 
-    if(tagDescriptions[tag] == undefined){
+    if(tagDescriptions[tag] === undefined){
         return;
     }
 
