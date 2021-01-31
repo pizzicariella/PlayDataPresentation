@@ -1,7 +1,7 @@
 package controlllers
 
 import controllers.HomeController
-import entities.AnnotatedToken
+import entities.AnnotatedText
 import org.scalatestplus.play._
 import play.api.libs.json.Json
 import play.api.test.Helpers._
@@ -125,7 +125,7 @@ class HomeControllerTest extends PlaySpec with Results{
         .apply(addCSRFToken(FakeRequest().withFormUrlEncodedBody(("text", text))))
       val result: Future[Result] = controller.annotatedText().apply(FakeRequest())
       val json = contentAsJson(result)
-      val at = AnnotatedToken(text, posAnnos, token)
+      val at = AnnotatedText(text, posAnnos, token)
       json mustBe Json.toJson(at)
     }
   }

@@ -51,7 +51,7 @@ function annotateText(annotated) {
 
 //TODO sometimes funny effects because of Normalizer (eg - is deleted )
 function createAnnotatedTextSpans(annotated) {
-    const {text, posAnnos, token} = annotated;
+    const {text, token, posAnnos, lemmas} = annotated;
     let spans = [];
     let subText = text;
     if(posAnnos.length != token.length){
@@ -68,7 +68,7 @@ function createAnnotatedTextSpans(annotated) {
         const wordSpan = document.createElement("span");
         const spanText = subText.substr(indexOfToken, token[i].length);
         wordSpan.innerText = spanText;
-        wordSpan.onmouseover= function(ev) {showTagInfo(posAnnos[i], ev);};
+        wordSpan.onmouseover= function(ev) {showTagInfo(posAnnos[i], lemmas[i], ev);};
         wordSpan.onmouseout = function (ev) {hideTagInfo(ev);}
         wordSpan.style="background-color: "+tagColors[posAnnos[i]];
         spans.push(wordSpan);
@@ -81,7 +81,7 @@ function createAnnotatedTextSpans(annotated) {
     return spans;
 }
 
-function showTagInfo(tag, event) {
+function showTagInfo(tag, lemma, event) {
 
     if(tagDescriptions[tag] == undefined){
         return;
@@ -92,6 +92,12 @@ function showTagInfo(tag, event) {
 
     const tagName = document.getElementById("tagName");
     tagName.innerText = ", tag: "+tag;
+
+    const lemmaDescription = document.getElementById("lemmaDescription");
+    lemmaDescription.innerText = "Lemma: ";
+
+    const lemmaSpan = document.getElementById("lemma");
+    lemmaSpan.innerText = lemma;
 
     const tipDiv = document.getElementById("posTagInfoTipDiv");
     const offset = $(event.target).offset();
@@ -104,7 +110,7 @@ function showTagInfo(tag, event) {
     $(tipDiv).offset({
         'top': offset.top + height
     });
-    $(tipDiv).width('10em');
+    $(tipDiv).width('15em');
     $(tipDiv).css("background-color", color);
 }
 

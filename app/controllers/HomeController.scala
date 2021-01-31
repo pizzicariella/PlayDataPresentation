@@ -1,6 +1,6 @@
 package controllers
 
-import entities.{AnnotatedToken, TextToTag}
+import entities.{AnnotatedText, TextToTag}
 
 import javax.inject._
 import play.api.mvc._
@@ -21,7 +21,7 @@ class HomeController @Inject()(implicit ec: ExecutionContext,
                                annotator: Annotator) extends MessagesAbstractController(cc) {
 
   var textForm = Form(mapping("text" -> nonEmptyText)(TextToTag.apply)(TextToTag.unapply))
-  var at: AnnotatedToken = null
+  var at: AnnotatedText = null
   var loadAnnos: String = "f"
   /**
    * Create an Action to render an HTML page with a welcome message.
