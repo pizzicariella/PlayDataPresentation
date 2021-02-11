@@ -19,15 +19,16 @@ class AnnotatedArticleController @Inject()(cc: ControllerComponents, val reactiv
   implicit def ec: ExecutionContext = cc.executionContext
 
   //TODO get collection name from config file
-  def articleCollection: Future[JSONCollection] = database.map(_.collection[JSONCollection]("annotated_articles"))
+  def articleCollection: Future[JSONCollection] = database.map(_.collection[JSONCollection]("articles_annotated"))
 
   def articleList = Action.async { implicit request =>
 
+    //TODO change max size? to what?
     val futureArticleList: Future[Seq[AnnotatedArticle]] = articleCollection
       .flatMap(articleCollection => articleCollection
         .find(Json.obj(), projection = Option.empty[JsObject])
         .cursor[AnnotatedArticle](ReadPreference.primary)
-        .collect[Seq](-1, Cursor.FailOnError[Seq[AnnotatedArticle]]()))
+        .collect[Seq](50, Cursor.FailOnError[Seq[AnnotatedArticle]]()))
 
     futureArticleList.map { article => Ok(Json.toJson(article)) }
   }

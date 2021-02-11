@@ -15,13 +15,13 @@ case class AnnotatedArticle(id: String,
 object AnnotatedArticle{
 
   implicit val annotatedArticleReads: Reads[AnnotatedArticle] = (
-    (JsPath \ "_id").read[String] and
-    (JsPath \ "longUrl").read[String] and
-    (JsPath \ "crawlTime" \ "$date").read[Long] and
+    (JsPath \ "_id" \ "$oid").read[String] and
+    (JsPath \ "long_url").read[String] and
+    (JsPath \ "crawl_time" \ "$date").read[Long] and
     (JsPath \ "text").read[String] and
-    (JsPath \ "annotationsPos").read[Seq[PosAnnotation]] and
-    (JsPath \ "lemmas").read[Seq[Lemma]] and
-    (JsPath \ "tagPercentage").read[Seq[TagPercentage]])(AnnotatedArticle.apply _)
+    (JsPath \ "pos").read[Seq[PosAnnotation]] and
+    (JsPath \ "lemma").read[Seq[Lemma]] and
+    (JsPath \ "posPercentage").read[Seq[TagPercentage]])(AnnotatedArticle.apply _)
 
   implicit val annotatedArticleWrites: Writes[AnnotatedArticle] = (
     (JsPath \ "_id").write[String] and

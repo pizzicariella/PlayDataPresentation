@@ -8,8 +8,14 @@ import org.apache.spark.sql.SparkSession
 
 import javax.inject._
 
+//TODO anpassen?
 @ImplementedBy(classOf[PosPipeAnnotator])
 trait Annotator {
+  /**
+   * Annotated given Text according to a PipelineModel.
+   * @param text: Text to annotate
+   * @return an instance of AnnotatedText, containing annotations
+   */
   def annotate(text: String): AnnotatedText
 }
 
