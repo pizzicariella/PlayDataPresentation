@@ -19,7 +19,7 @@ class AnnotatedArticleControllerTest extends PlaySpec{
 
   val controller = new AnnotatedArticleController(cc, reactiveMongoApi)
 
-  //TODO?? Methods that require database access are not tested yet
+  //TODO ?? Methods that require database access are not tested yet
 
   "inMemoryArticleList" should {
     "return OK" in {

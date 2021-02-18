@@ -3,15 +3,14 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
-# An example controller showing a sample home page
 GET     /                           controllers.HomeController.index
 GET     /corpus                     controllers.HomeController.corpus
+GET     /corpus/articles            controllers.AnnotatedArticleController.articleList
+GET     /corpus/test/articles       controllers.AnnotatedArticleController.inMemoryArticleList
 GET     /analyze                    controllers.HomeController.analyze
 POST    /analyze/text               controllers.HomeController.validateTextForm
 GET     /analyze/annotated          controllers.HomeController.annotatedText
 GET     /info                       controllers.HomeController.info
-GET     /corpus/articles            controllers.AnnotatedArticleController.articleList
-GET     /corpus/test/articles       controllers.AnnotatedArticleController.inMemoryArticleList
 # Javascript routing
 GET     /javascriptRoutes           controllers.AnnotatedArticleController.javascriptRoutes
 
