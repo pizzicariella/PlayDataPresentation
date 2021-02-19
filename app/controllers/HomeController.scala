@@ -25,7 +25,7 @@ class HomeController @Inject()(implicit ec: ExecutionContext,
     Ok(views.html.index())
   }
 
-  def corpus = Action { implicit request =>
+  def corpus = Action {
     Ok(views.html.corpus())
   }
 

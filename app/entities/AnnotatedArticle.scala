@@ -24,12 +24,12 @@ object AnnotatedArticle{
     (JsPath \ "posPercentage").read[Seq[TagPercentage]])(AnnotatedArticle.apply _)
 
   implicit val annotatedArticleWrites: Writes[AnnotatedArticle] = (
-    (JsPath \ "_id").write[String] and
-    (JsPath \ "longUrl").write[String] and
-    (JsPath \ "crawlTime" \ "$date").write[Long] and
+    (JsPath \ "_id" \ "$oid").write[String] and
+    (JsPath \ "long_url").write[String] and
+    (JsPath \ "crawl_time" \ "$date").write[Long] and
     (JsPath \ "text").write[String] and
-    (JsPath \ "annotationsPos").write[Seq[PosAnnotation]] and
-    (JsPath \ "lemmas").write[Seq[Lemma]] and
-    (JsPath \ "tagPercentage").write[Seq[TagPercentage]])(unlift(AnnotatedArticle.unapply)
+    (JsPath \ "pos").write[Seq[PosAnnotation]] and
+    (JsPath \ "lemma").write[Seq[Lemma]] and
+    (JsPath \ "posPercentage").write[Seq[TagPercentage]])(unlift(AnnotatedArticle.unapply)
   )
 }

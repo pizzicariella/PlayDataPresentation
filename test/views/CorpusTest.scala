@@ -6,7 +6,6 @@ import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout}
 
 class CorpusTest extends PlaySpec{
 
-  implicit lazy val req = FakeRequest()
   val html = views.html.corpus()
 
   "corpus template" should {

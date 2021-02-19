@@ -23,10 +23,9 @@ $(document).ready(function () {
 
 
 function showPosAnnotations(articleId) {
-    const articleInfo = loadedArticles.find(article => article._id === articleId);
-    //const {_id, longUrl, crawlTime, text, lemmas, annotationsPos} = articleInfo;
-    const {text, lemmas, annotationsPos} = articleInfo
-    const completeTextAnnotated = completeAnnotations(annotationsPos, lemmas, text.length);
+    const articleInfo = loadedArticles.find(article => article._id["$oid"] === articleId);
+    const {text, lemma, pos} = articleInfo
+    const completeTextAnnotated = completeAnnotations(pos, lemma, text.length);
     const wordSpans = completeTextAnnotated.map(posAndLemma =>
         convertPosAnnotationToWordSpan(posAndLemma, text, articleId));
     const article = document.getElementById(articleId);
@@ -138,14 +137,14 @@ function completeAnnotations(annotations, lemmas, textLength) {
 }
 
 const insertArticle = (articleInfo) => {
-    const {_id, longUrl, crawlTime, text, tagPercentage} = articleInfo;
+    const {_id, long_url, crawl_time, text, posPercentage} = articleInfo;
 
     const textAttribs = text.split("$§$");
 
     const articleTemplate = document.getElementById("articleTemplate").content;
     const article = articleTemplate.cloneNode(true);
     const articleElement = article.getElementById("setToArticleId");
-    articleElement.id = _id;
+    articleElement.id = _id["$oid"];
 
     const articleTitle = article.getElementById("articleTitle");
     articleTitle.innerText = textAttribs[0];
@@ -158,31 +157,31 @@ const insertArticle = (articleInfo) => {
 
     const articleReference = article.getElementById("articleReference");
     const link = document.createElement('a');
-    const linkText = document.createTextNode(longUrl);
-    const href = longUrl;
+    const linkText = document.createTextNode(long_url);
+    const href = long_url;
     link.appendChild(linkText);
     link.href = href;
     const sourceSpan = document.createElement("span");
     sourceSpan.innerText = "Quelle: ";
     const dateSpan = document.createElement("span");
-    dateSpan.innerText = " aufgerufen am: ".concat(new Date(crawlTime["$date"]).toString());
+    dateSpan.innerText = " aufgerufen am: ".concat(new Date(crawl_time["$date"]).toString());
     articleReference.appendChild(sourceSpan);
     articleReference.appendChild(link);
     articleReference.appendChild(dateSpan);
 
     const button = article.getElementById("showAnnotationsButton");
-    button.onclick = function () {showPosAnnotations(_id);};
+    button.onclick = function () {showPosAnnotations(_id["$oid"]);};
 
-    createArticleInformation(tagPercentage, article);
+    createArticleInformation(posPercentage, article);
 
     document.getElementById("articleTab").appendChild(article);
 }
 
-function createArticleInformation(tagPercentage, article) {
+function createArticleInformation(posPercentage, article) {
     const list = article.querySelector("#posTagList");
-    tagPercentage.sort(compareTP);
-    for(let i=0; i<tagPercentage.length; i++){
-        const {tag, percentage} = tagPercentage[i];
+    posPercentage.sort(compareTP);
+    for(let i=0; i<posPercentage.length; i++){
+        const {tag, percentage} = posPercentage[i];
         const dt = document.createElement("DT");
         const tagSpan = document.createElement("SPAN");
         const percentageSpan = document.createElement("SPAN");
