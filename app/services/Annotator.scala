@@ -32,9 +32,10 @@ class PosPipeAnnotator extends Annotator {
     .config("spark.driver.bindAddress", "127.0.0.1")
     .getOrCreate()
 
+  val model = PipelineModel.load("conf/resources/posPipelineModel")
+
 
   override def annotate(text: String): AnnotatedText = {
-    val model = PipelineModel.load("conf/resources/posPipelineModel")
     val map = new LightPipeline(model).annotate(text)
     val normalized = map.getOrElse("normalized", Seq[String]("error"))
     val pos = map.getOrElse("pos", Seq[String]("error"))
