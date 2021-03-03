@@ -157,14 +157,16 @@ const insertArticle = (articleInfo) => {
 
     const articleReference = article.getElementById("articleReference");
     const link = document.createElement('a');
-    const linkText = document.createTextNode(long_url);
+    const linkText = document.createTextNode(long_url+";");
     const href = long_url;
     link.appendChild(linkText);
     link.href = href;
     const sourceSpan = document.createElement("span");
     sourceSpan.innerText = "Quelle: ";
     const dateSpan = document.createElement("span");
-    dateSpan.innerText = " aufgerufen am: ".concat(new Date(crawl_time["$date"]).toString());
+    const date = new Date(crawl_time["$date"])
+    dateSpan.innerText = " aufgerufen am: ".concat(date.getDate() + "." + (date.getMonth()+1) + "." +
+        date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds() + " Uhr"); //.toString());
     articleReference.appendChild(sourceSpan);
     articleReference.appendChild(link);
     articleReference.appendChild(dateSpan);
