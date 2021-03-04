@@ -1,4 +1,5 @@
 let loadedArticles = [];
+let visibleArticles = [];
 const tagDescriptions = {ADJ: "Adjektiv", ADP: "Präposition", ADV: "Adverb", AUX: "Hilfsverb",
     CCONJ: "Konjunktion (koordinierend)", DET: "Artikel", INTJ: "Interjektion", NOUN: "Nomen", NUM: "Zahlwort",
     PART: "Partikel", PRON: "Pronomen", PROPN: "Eigenname", SCONJ: "Konjunktion (subordinierend)",
@@ -13,13 +14,49 @@ $(document).ready(function () {
     jsRoutes.controllers.AnnotatedArticleController.articleList().ajax({
         success: function (result){
             loadedArticles = result;
-            result.forEach(article => insertArticle(article));
+            const numArticles = loadedArticles.length;
+            const numPages = Math.floor(numArticles / 10);
+            const paginationBar = document.getElementById("paginationBar");
+            for(let i = 0; i<numPages; i++){
+                const aEle =  document.createElement("A");
+                aEle.innerText = i+2;
+                aEle.classList.add("w3-button");
+                aEle.classList.add("w3-hover-black");
+                aEle.href = "javascript:loadNextPage("+(i+2)+");";
+                paginationBar.appendChild(aEle);
+            }
+            const articlesToInsert = result.slice(0,10);
+            articlesToInsert.forEach(article => insertArticle(article));
+            visibleArticles = articlesToInsert;
         },
         failure: function (err){
             console.log("there was an error: "+err);
         }
     });
 });
+
+function loadNextPage(pageNumber){
+    for(let i=0; i<visibleArticles.length; i++){
+        const article = document.getElementById(visibleArticles[i]._id["$oid"]);
+        article.remove();
+    }
+    const nextArticles = loadedArticles.slice(pageNumber*10, (pageNumber*10)+10);
+    nextArticles.forEach(article => insertArticle(article));
+    visibleArticles = nextArticles;
+    const paginationBar = document.getElementById("paginationBar");
+    const paginationChildren = paginationBar.childNodes;
+    console.log(paginationChildren);
+    //TODO funktioniert noch nicht weil text elemente in liste enthalten sind ? ...
+    for(let i=0; i<paginationChildren.length; i++){
+        if(paginationChildren[i].innerText == pageNumber){
+            paginationChildren[i].classList.remove("w3-hover-black");
+            paginationChildren[i].classList.add("w3-black");
+        } else {
+            paginationChildren[i].className = "w3-button";
+            paginationChildren[i].classList.add("w3-hover-black");
+        }
+    }
+}
 
 
 function showPosAnnotations(articleId) {
@@ -63,7 +100,7 @@ function showPosAnnotations(articleId) {
     }
 }
 
-function showTagInfo(tag, lemma, articleId, event) {
+function showTagInfo(tag, lemma, articleId) {
 
     if(tagDescriptions[tag] === undefined){
         return ;
@@ -76,6 +113,9 @@ function showTagInfo(tag, lemma, articleId, event) {
     const tagName = currentArticle.querySelector("#tagName");
     tagName.innerText = ", tag: "+tag;
 
+    const lemmaDescription = currentArticle.querySelector("#lemmaDescription");
+    lemmaDescription.innerText = "Lemma: ";
+
     const lemmaSpan = currentArticle.querySelector("#lemma");
     lemmaSpan.innerText = lemma;
 
@@ -83,6 +123,7 @@ function showTagInfo(tag, lemma, articleId, event) {
     const offset = $(event.target).offset();
     const height = $(event.target).outerHeight();
     const color = $(event.target).css("background-color");
+
     $(tipDiv).show();
     $(tipDiv).offset({
         'left': offset.left
@@ -106,8 +147,8 @@ const convertPosAnnotationToWordSpan = (posAndLemma, text, articleId) => {
     const {result} = lemma;
     const wordSpan = document.createElement("span");
     wordSpan.innerText = text.substring(begin, end+1);
-    wordSpan.onmouseover= function(ev) {showTagInfo(tag, result, articleId, ev);};
-    wordSpan.onmouseout = function (ev) {hideTagInfo(articleId, ev);};
+    wordSpan.onmouseover= function() {showTagInfo(tag, result, articleId)};
+    wordSpan.onmouseout = function() {hideTagInfo(articleId)};
     wordSpan.style="background-color: "+tagColors[tag];
     return wordSpan;
 }
@@ -121,15 +162,15 @@ function completeAnnotations(annotations, lemmas, textLength) {
         if(i !== annotations.length-1){
             let {begin} = annotations[i+1];
             if(begin > endPrev+1){
-                const empyAnno = {begin: endPrev+1, end: begin-1, tag: "empy"};
+                const emptyAnno = {begin: endPrev+1, end: begin-1, tag: "empty"};
                 const emptyLemma = {beginToken: endPrev+1, endToken: begin-1, result: "empty"};
-                completeAnnos.push({pos: empyAnno, lemma: emptyLemma});
+                completeAnnos.push({pos: emptyAnno, lemma: emptyLemma});
             }
         } else {
             if(textLength-1 > endPrev){
-                const empyAnno = {begin: endPrev+1, end: textLength-1, tag: "empy"};
+                const emptyAnno = {begin: endPrev+1, end: textLength-1, tag: "empty"};
                 const emptyLemma = {beginToken: endPrev+1, endToken: textLength-1, result: "empty"}
-                completeAnnos.push({pos: empyAnno, lemma:emptyLemma});
+                completeAnnos.push({pos: emptyAnno, lemma:emptyLemma});
             }
         }
     }
@@ -173,6 +214,7 @@ const insertArticle = (articleInfo) => {
 
     const button = article.getElementById("showAnnotationsButton");
     button.onclick = function () {showPosAnnotations(_id["$oid"]);};
+
 
     createArticleInformation(posPercentage, article);
 
