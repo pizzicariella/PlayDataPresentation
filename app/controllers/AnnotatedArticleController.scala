@@ -28,7 +28,7 @@ class AnnotatedArticleController @Inject()(cc: ControllerComponents, val reactiv
       .flatMap(articleCollection => articleCollection
         .find(Json.obj(), projection = Option.empty[JsObject])
         .cursor[AnnotatedArticle](ReadPreference.primary)
-        .collect[Seq](50, Cursor.FailOnError[Seq[AnnotatedArticle]]()))
+        .collect[Seq](200, Cursor.FailOnError[Seq[AnnotatedArticle]]()))
 
     futureArticleList.map { article => Ok(Json.toJson(article)) }
   }

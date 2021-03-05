@@ -16,14 +16,25 @@ $(document).ready(function () {
             loadedArticles = result;
             const numArticles = loadedArticles.length;
             const numPages = Math.floor(numArticles / 10);
+            const paginationElems = ((numPages > 5) ? 5 : numPages);
             const paginationBar = document.getElementById("paginationBar");
-            for(let i = 0; i<numPages; i++){
+            paginationBar.removeChild(paginationBar.childNodes[0]);
+            paginationBar.removeChild(paginationBar.childNodes[1]);
+            for(let i = 0; i<paginationElems; i++){
                 const aEle =  document.createElement("A");
                 aEle.innerText = i+2;
                 aEle.classList.add("w3-button");
                 aEle.classList.add("w3-hover-black");
-                aEle.href = "javascript:loadNextPage("+(i+2)+");";
+                aEle.href = "javascript:loadNextPage("+(i+1)+");";
                 paginationBar.appendChild(aEle);
+            }
+            if(numPages > 5){
+                const followUpA = document.createElement("A");
+                followUpA.innerText = "»";
+                followUpA.classList.add("w3-button");
+                followUpA.classList.add("w3-hover-black");
+                followUpA.href = "javascript:loadNextPagination();";
+                paginationBar.appendChild(followUpA)
             }
             const articlesToInsert = result.slice(0,10);
             articlesToInsert.forEach(article => insertArticle(article));
@@ -35,6 +46,81 @@ $(document).ready(function () {
     });
 });
 
+function loadNextPagination(){
+    const paginationBar = document.getElementById("paginationBar");
+    const paginationChildren = paginationBar.childNodes;
+    const biggestChild = ((paginationChildren[0].innerText == "«") ? parseInt(paginationChildren[6].innerText) :
+        parseInt(paginationChildren[5].innerText));
+    while(paginationBar.childNodes[0]){
+        paginationBar.removeChild(paginationBar.childNodes[0]);
+    }
+    const numPages = Math.floor((loadedArticles.length - biggestChild*10) / 10);
+    const paginationElems = ((numPages > 6) ? 6 : numPages);
+    const followBackA = document.createElement("A");
+    followBackA.innerText = "«";
+    followBackA.classList.add("w3-button");
+    followBackA.classList.add("w3-hover-black");
+    followBackA.href = "javascript:loadPreviousPagination();";
+    paginationBar.appendChild(followBackA)
+    for(let i = 0; i<paginationElems; i++){
+        const aEle =  document.createElement("A");
+        aEle.innerText = i+1+biggestChild;
+        aEle.classList.add("w3-button");
+        if(i+1+biggestChild == biggestChild+1){
+            aEle.classList.add("w3-black");
+        } else {
+            aEle.classList.add("w3-hover-black");
+        }
+        aEle.href = "javascript:loadNextPage("+(i+biggestChild)+");";
+        paginationBar.appendChild(aEle);
+    }
+    if(numPages > 6){
+        const followUpA = document.createElement("A");
+        followUpA.innerText = "»";
+        followUpA.classList.add("w3-button");
+        followUpA.classList.add("w3-hover-black");
+        followUpA.href = "javascript:loadNextPagination();";
+        paginationBar.appendChild(followUpA)
+    }
+    loadNextPage(parseInt(paginationBar.childNodes[1].innerText)-1);
+}
+
+function loadPreviousPagination(){
+    const paginationBar = document.getElementById("paginationBar");
+    const paginationChildren = paginationBar.childNodes;
+    const smallestChild = parseInt(paginationChildren[1].innerText);
+    while(paginationBar.childNodes[0]){
+        paginationBar.removeChild(paginationBar.childNodes[0]);
+    }
+    if(smallestChild > 7){
+        const followBackA = document.createElement("A");
+        followBackA.innerText = "«";
+        followBackA.classList.add("w3-button");
+        followBackA.classList.add("w3-hover-black");
+        followBackA.href = "javascript:loadPreviousPagination();";
+        paginationBar.appendChild(followBackA)
+    }
+    for(let i = 6; i>0; i--){
+        const aEle =  document.createElement("A");
+        aEle.innerText = smallestChild-i;
+        aEle.classList.add("w3-button");
+        if(i == 6){
+            aEle.classList.add("w3-black");
+        } else {
+            aEle.classList.add("w3-hover-black");
+        }
+        aEle.href = "javascript:loadNextPage("+(smallestChild-i-1)+");";
+        paginationBar.appendChild(aEle);
+    }
+    const followUpA = document.createElement("A");
+    followUpA.innerText = "»";
+    followUpA.classList.add("w3-button");
+    followUpA.classList.add("w3-hover-black");
+    followUpA.href = "javascript:loadNextPagination();";
+    paginationBar.appendChild(followUpA);
+    loadNextPage(smallestChild-2);
+}
+
 function loadNextPage(pageNumber){
     for(let i=0; i<visibleArticles.length; i++){
         const article = document.getElementById(visibleArticles[i]._id["$oid"]);
@@ -45,10 +131,8 @@ function loadNextPage(pageNumber){
     visibleArticles = nextArticles;
     const paginationBar = document.getElementById("paginationBar");
     const paginationChildren = paginationBar.childNodes;
-    console.log(paginationChildren);
-    //TODO funktioniert noch nicht weil text elemente in liste enthalten sind ? ...
     for(let i=0; i<paginationChildren.length; i++){
-        if(paginationChildren[i].innerText == pageNumber){
+        if(paginationChildren[i].innerText == pageNumber+1){
             paginationChildren[i].classList.remove("w3-hover-black");
             paginationChildren[i].classList.add("w3-black");
         } else {
@@ -56,6 +140,7 @@ function loadNextPage(pageNumber){
             paginationChildren[i].classList.add("w3-hover-black");
         }
     }
+    $('html, body').scrollTop(0);
 }
 
 
