@@ -1,6 +1,9 @@
 package controllers
 
 import entities.AnnotatedArticle
+import org.apache.commons.io.IOUtils
+import play.Environment
+
 import javax.inject.Inject
 import play.api.libs.json.{JsObject, _}
 import play.api.mvc._
@@ -11,9 +14,14 @@ import reactivemongo.api.{Cursor, ReadPreference}
 import reactivemongo.play.json._
 import reactivemongo.play.json.collection.JSONCollection
 import utils.FileReader.readFile
+
+import java.io.{BufferedReader, InputStreamReader}
+import java.nio.charset.StandardCharsets
 import scala.concurrent.{ExecutionContext, Future}
 
-class AnnotatedArticleController @Inject()(cc: ControllerComponents, val reactiveMongoApi: ReactiveMongoApi)
+class AnnotatedArticleController @Inject()(cc: ControllerComponents,
+                                           val reactiveMongoApi: ReactiveMongoApi,
+                                           val env: Environment)
   extends AbstractController(cc) with MongoController with ReactiveMongoComponents {
 
   implicit def ec: ExecutionContext = cc.executionContext
@@ -34,10 +42,14 @@ class AnnotatedArticleController @Inject()(cc: ControllerComponents, val reactiv
   }
 
   def inMemoryArticleList() = Action { implicit request =>
-    //val path = "conf/resources/annotatedArticles.json"
-    val path = "conf/resources/inMemoryArticles.json"
+    //only in development mode
+    //val path = "conf/resources/inMemoryArticles.json"
+    //val jsonString = readFile(path).reduce(_+_)
 
-    val jsonString = readFile(path).reduce(_+_)
+    //only in production mode
+    val jsonString = IOUtils.toString(env.resourceAsStream("resources/inMemoryArticles.json"), StandardCharsets.UTF_8)
+
+
     val jsResult = Json.parse(jsonString).validate[Seq[AnnotatedArticle]]
     jsResult.fold(
       error => {Ok(error.toString())},
