@@ -12,7 +12,7 @@ import javax.inject._
 @ImplementedBy(classOf[PosPipeAnnotator])
 trait Annotator {
   /**
-   * Annotated given Text according to a PipelineModel.
+   * Annotates given Text according to a PipelineModel.
    * @param text: Text to annotate
    * @return an instance of AnnotatedText, containing annotations
    */
