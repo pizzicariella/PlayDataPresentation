@@ -11,7 +11,7 @@ const tagColors = {ADJ: "#A1CE5E", ADP: "#FACF63", ADV: "#969A52", AUX: "#FBAF5F
     VERB: "#F68B69", X: "#C8C9D0"};
 
 $(document).ready(function () {
-    jsRoutes.controllers.AnnotatedArticleController.inMemoryArticleList().ajax({
+    jsRoutes.controllers.AnnotatedArticleController.articleList().ajax({
         success: function (result){
             loadedArticles = result;
             const numArticles = loadedArticles.length;
@@ -226,7 +226,6 @@ function hideTagInfo(articleId, ev){
 }
 
 const convertPosAnnotationToWordSpan = (posAndLemma, text, articleId) => {
-    //const {begin, end, tag} = annotation;
     const {pos, lemma} = posAndLemma;
     const {begin, end, tag} = pos;
     const {result} = lemma;

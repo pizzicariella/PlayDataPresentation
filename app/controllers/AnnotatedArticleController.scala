@@ -1,5 +1,6 @@
 package controllers
 
+import com.typesafe.config.ConfigFactory
 import entities.AnnotatedArticle
 import org.apache.commons.io.IOUtils
 import play.Environment
@@ -27,7 +28,8 @@ class AnnotatedArticleController @Inject()(cc: ControllerComponents,
   implicit def ec: ExecutionContext = cc.executionContext
 
   //TODO get collection name from config file
-  def articleCollection: Future[JSONCollection] = database.map(_.collection[JSONCollection]("articles_annotated"))
+  //val collectionName = ConfigFactory.load().getString("mongodb.collection")
+  def articleCollection: Future[JSONCollection] = database.map(_.collection[JSONCollection]("articles_annotated_2"))
 
   def articleList = Action.async { implicit request =>
 

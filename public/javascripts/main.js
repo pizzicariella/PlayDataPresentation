@@ -3,7 +3,6 @@ $(window).on('load', function(){
     navbarSelection(title.innerText);
 });
 
-//TODO ggf. Liste mit Mapping title - menuText erstellen
 function navbarSelection(title){
     const navbarItems = document.getElementsByClassName("w3-bar-item");
     for(let i=0; i<navbarItems.length; i++){
