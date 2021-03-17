@@ -29,7 +29,7 @@ class AnnotatedArticleController @Inject()(cc: ControllerComponents,
 
   //TODO get collection name from config file
   //val collectionName = ConfigFactory.load().getString("mongodb.collection")
-  def articleCollection: Future[JSONCollection] = database.map(_.collection[JSONCollection]("articles_annotated_2"))
+  def articleCollection: Future[JSONCollection] = database.map(_.collection[JSONCollection]("articles_annotated"))
 
   def articleList = Action.async { implicit request =>
 
