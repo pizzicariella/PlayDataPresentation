@@ -262,7 +262,7 @@ function completeAnnotations(annotations, lemmas, textLength) {
 }
 
 const insertArticle = (articleInfo) => {
-    const {_id, long_url, crawl_time, text, posPercentage} = articleInfo;
+    const {_id, long_url, crawl_time, text, pos_percentage} = articleInfo;
 
     const textAttribs = text.split("$§$");
 
@@ -300,7 +300,7 @@ const insertArticle = (articleInfo) => {
     button.onclick = function () {showPosAnnotations(_id["$oid"]);};
 
 
-    createArticleInformation(posPercentage, article);
+    createArticleInformation(pos_percentage, article);
 
     document.getElementById("articleTab").appendChild(article);
 }
