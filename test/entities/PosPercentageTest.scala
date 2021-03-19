@@ -3,13 +3,13 @@ package entities
 import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.Json
 
-class TagPercentageTest extends PlaySpec{
-  val exampleTagPercentage = TagPercentage("NOUN",0.4)
+class PosPercentageTest extends PlaySpec{
+  val exampleTagPercentage = PosPercentage("NOUN",0.4)
   val exampleTagPercentageString = "{\"tag\":\"NOUN\",\"percentage\":0.4}"
 
   "TagPercentage Json Format" should {
     "create correct object" in {
-      val jsResult = Json.parse(exampleTagPercentageString).validate[TagPercentage]
+      val jsResult = Json.parse(exampleTagPercentageString).validate[PosPercentage]
       val res = jsResult.getOrElse("undefined")
       res mustBe exampleTagPercentage
     }

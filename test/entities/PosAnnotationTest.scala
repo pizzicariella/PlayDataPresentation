@@ -20,5 +20,4 @@ class PosAnnotationTest extends PlaySpec{
       jsonString mustBe examplePosAnnotationString
     }
   }
-
 }

@@ -1,6 +1,7 @@
 package testHelpers
 
-import play.api.mvc.{AnyContentAsEmpty, DefaultActionBuilder, DefaultMessagesActionBuilderImpl, DefaultMessagesControllerComponents, MessagesControllerComponents}
+import play.api.mvc.{AnyContentAsEmpty, DefaultActionBuilder, DefaultMessagesActionBuilderImpl,
+  DefaultMessagesControllerComponents, MessagesControllerComponents}
 import play.api.test.Helpers.{stubBodyParser, stubControllerComponents}
 
 object TestHelpers {

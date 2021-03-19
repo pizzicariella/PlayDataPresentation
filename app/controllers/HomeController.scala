@@ -1,16 +1,13 @@
 package controllers
 
 import entities.{AnnotatedText, TextToTag}
-
 import javax.inject._
 import play.api.mvc._
 import play.api.data._
 import play.api.data.Forms._
 import play.api.libs.json.Json
 import services.Annotator
-
 import scala.concurrent.ExecutionContext
-
 
 @Singleton
 class HomeController @Inject()(implicit ec: ExecutionContext,
@@ -58,5 +55,4 @@ class HomeController @Inject()(implicit ec: ExecutionContext,
   def info = Action {
     Ok(views.html.info())
   }
-
 }

@@ -8,8 +8,8 @@ import play.api.test.CSRFTokenHelper.addCSRFToken
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout, stubMessagesApi, stubMessagesRequest}
 
-//Unfortunately integration testing with selenium Web browser is not possible because com.google.guava version
-//>21.0 is required, while Spark requires guava version 15.0
+/*Unfortunately integration testing with selenium Web browser is not possible because com.google.guava version
+>21.0 is required, while Spark requires guava version 15.0 */
 class AnalyzeTest extends PlaySpec {
 
   "analyze template" should {

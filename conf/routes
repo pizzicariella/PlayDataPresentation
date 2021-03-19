@@ -11,6 +11,7 @@ GET     /analyze                    controllers.HomeController.analyze
 POST    /analyze/text               controllers.HomeController.validateTextForm
 GET     /analyze/annotated          controllers.HomeController.annotatedText
 GET     /info                       controllers.HomeController.info
+
 # Javascript routing
 GET     /javascriptRoutes           controllers.AnnotatedArticleController.javascriptRoutes
 

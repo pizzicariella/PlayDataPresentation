@@ -13,7 +13,7 @@ class AnnotatedArticleTest extends PlaySpec{
     Seq(PosAnnotation(0, 3, "PRON"), PosAnnotation(5, 7, "AUX"), PosAnnotation(9, 11, "DET"),
       PosAnnotation(13, 16, "NOUN"), PosAnnotation(18, 21, "NOUN")),
     Seq(Lemma(0, 3, "dies"), Lemma(5, 7, "sein"), Lemma(9, 11, "ein"), Lemma(13, 16, "Test"), Lemma(18, 21, "Text")),
-    Seq(TagPercentage("PRON", 0.2), TagPercentage("AUX", 0.2), TagPercentage("DET", 0.2), TagPercentage("NOUN", 0.4)))
+    Seq(PosPercentage("PRON", 0.2), PosPercentage("AUX", 0.2), PosPercentage("DET", 0.2), PosPercentage("NOUN", 0.4)))
 
   val exampleArticleString = "{\"_id\":{\"$oid\":\"testId\"},\"long_url\":\"www.test.de\",\"crawl_time\":" +
     "{\"$date\":1575834314135},\"text\":\"Dies ist ein Test Text\",\"pos\":[" +

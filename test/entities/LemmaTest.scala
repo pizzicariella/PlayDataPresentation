@@ -20,5 +20,4 @@ class LemmaTest extends PlaySpec{
       jsonString mustBe exampleLemmaString
     }
   }
-
 }

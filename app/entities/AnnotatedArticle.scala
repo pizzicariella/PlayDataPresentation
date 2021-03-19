@@ -10,7 +10,7 @@ case class AnnotatedArticle(id: String,
                             text: String,
                             annotationsPos: Seq[PosAnnotation],
                             lemmas: Seq[Lemma],
-                            tagPercentage: Seq[TagPercentage])
+                            tagPercentage: Seq[PosPercentage])
 
 object AnnotatedArticle{
 
@@ -21,7 +21,7 @@ object AnnotatedArticle{
     (JsPath \ "text").read[String] and
     (JsPath \ "pos").read[Seq[PosAnnotation]] and
     (JsPath \ "lemma").read[Seq[Lemma]] and
-    (JsPath \ "pos_percentage").read[Seq[TagPercentage]])(AnnotatedArticle.apply _)
+    (JsPath \ "pos_percentage").read[Seq[PosPercentage]])(AnnotatedArticle.apply _)
 
   implicit val annotatedArticleWrites: Writes[AnnotatedArticle] = (
     (JsPath \ "_id" \ "$oid").write[String] and
@@ -30,6 +30,6 @@ object AnnotatedArticle{
     (JsPath \ "text").write[String] and
     (JsPath \ "pos").write[Seq[PosAnnotation]] and
     (JsPath \ "lemma").write[Seq[Lemma]] and
-    (JsPath \ "pos_percentage").write[Seq[TagPercentage]])(unlift(AnnotatedArticle.unapply)
+    (JsPath \ "pos_percentage").write[Seq[PosPercentage]])(unlift(AnnotatedArticle.unapply)
   )
 }

@@ -13,31 +13,30 @@
 
 @main("Analyse") {
 
-<section id="content">
-    <section class="w3-row w3-padding-64">
-        <div class="w3-main" style="margin-left: 20px">
-            <div class="w3-half w3-container">
-                <h1>Text analysieren</h1>
-                <p>Hier einfach einen beliebigen Text einfügen und auf "Analysieren" drücken</p>
-                    @helper.form(action = helper.CSRF(routes.HomeController.validateTextForm())){
-                        @helper.textarea(textForm("text"), args = 'rows -> 10, 'cols -> 70)
-                        <div class="formActions">
-                            <button type="submit">Analysieren</button>
+    <section id="content">
+        <section class="w3-row w3-padding-64">
+            <div class="w3-main" style="margin-left: 20px">
+                <div class="w3-half w3-container">
+                    <h1>Text analysieren</h1>
+                    <p>Hier einfach einen beliebigen Text einfügen und auf "Analysieren" drücken</p>
+                        @helper.form(action = helper.CSRF(routes.HomeController.validateTextForm())){
+                            @helper.textarea(textForm("text"), args = 'rows -> 10, 'cols -> 70)
+                            <div class="formActions">
+                                <button type="submit">Analysieren</button>
+                            </div>
+                        }
+                </div>
+                <div id="annotationResults" class="w3-third w3-container">
+                    <h2 id="resultHeading" class="w3-text-teal"></h2>
+                    <div id="spanDiv"></div>
+                    <div id="posTagTipTab">
+                        <div id="posTagInfoTipDiv">
+                            <p><span><b id="tagDescription"></b></span><span id="tagName"></span></p>
+                            <p><span id="lemmaDescription"></span><span><b id="lemma"></b></span></p>
                         </div>
-                    }
-            </div>
-            <div id="annotationResults" class="w3-third w3-container">
-                <h2 id="resultHeading" class="w3-text-teal"></h2>
-                <div id="spanDiv"></div>
-                <div id="posTagTipTab">
-                    <div id="posTagInfoTipDiv">
-                        <p><span><b id="tagDescription"></b></span><span id="tagName"></span></p>
-                        <p><span id="lemmaDescription"></span><span><b id="lemma"></b></span></p>
                     </div>
                 </div>
             </div>
-
-        </div>
+        </section>
     </section>
-</section>
 }

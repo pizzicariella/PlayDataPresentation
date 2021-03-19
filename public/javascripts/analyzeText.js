@@ -33,7 +33,6 @@ function start(arg) {
                     console.log("there was an error: "+err);
                 }
             });
-            console.log("t");
         }
     };
 }

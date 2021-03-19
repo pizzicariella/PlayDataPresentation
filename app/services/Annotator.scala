@@ -32,7 +32,6 @@ class PosPipeAnnotator extends Annotator {
 
   val model = PipelineModel.load("conf/resources/posPipelineModel")
 
-
   override def annotate(text: String): AnnotatedText = {
     val map = new LightPipeline(model).annotate(text)
     val normalized = map.getOrElse("normalized", Seq[String]("error"))

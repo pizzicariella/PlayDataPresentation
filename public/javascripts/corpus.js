@@ -291,14 +291,13 @@ const insertArticle = (articleInfo) => {
     const dateSpan = document.createElement("span");
     const date = new Date(crawl_time["$date"])
     dateSpan.innerText = " aufgerufen am: ".concat(date.getDate() + "." + (date.getMonth()+1) + "." +
-        date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds() + " Uhr"); //.toString());
+        date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds() + " Uhr");
     articleReference.appendChild(sourceSpan);
     articleReference.appendChild(link);
     articleReference.appendChild(dateSpan);
 
     const button = article.getElementById("showAnnotationsButton");
     button.onclick = function () {showPosAnnotations(_id["$oid"]);};
-
 
     createArticleInformation(pos_percentage, article);
 
