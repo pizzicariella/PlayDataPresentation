@@ -3,7 +3,7 @@ package services
 import entities.AnnotatedText
 import org.scalatestplus.play.PlaySpec
 
-//This class ist not testing for correct results, as results depend on the model which should not be tested
+//This class ist not testing for correct results, as results depend on the used model which should not be tested
 class AnnotatorTest extends PlaySpec{
 
   "PosPipeAnnotator annotate" should {
@@ -14,5 +14,4 @@ class AnnotatorTest extends PlaySpec{
       atInstance mustBe true
     }
   }
-
 }

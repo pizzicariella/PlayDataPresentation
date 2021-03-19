@@ -41,7 +41,6 @@ class HomeController @Inject()(implicit ec: ExecutionContext,
     textForm.bindFromRequest.fold(
       formWithErrors => BadRequest(views.html.analyze(formWithErrors, "f")),
         data => {
-          //TODO avoid vars and directly call views?
           at = annotator.annotate(data.text)
           val filledForm = textForm.fill(TextToTag(data.text))
           textForm = filledForm

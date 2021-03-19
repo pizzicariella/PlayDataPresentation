@@ -11,5 +11,4 @@ class FileReaderTest extends PlaySpec{
       lines.head mustBe "Dies ist"
     }
   }
-
 }

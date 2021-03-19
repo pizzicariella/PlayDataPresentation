@@ -8,7 +8,6 @@ import org.apache.spark.sql.SparkSession
 
 import javax.inject._
 
-//TODO anpassen?
 @ImplementedBy(classOf[PosPipeAnnotator])
 trait Annotator {
   /**
@@ -22,7 +21,6 @@ trait Annotator {
 @Singleton
 class PosPipeAnnotator extends Annotator {
 
-  //TODO lazy creation. better to create eagerly on app start up?
   val sc: SparkSession = SparkSession
     .builder()
     .appName("PlayDataPresentation")

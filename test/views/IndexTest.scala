@@ -12,5 +12,4 @@ class IndexTest extends PlaySpec{
       contentAsString(html) must include("Präsentation Bachelorarbeit")
     }
   }
-
 }
