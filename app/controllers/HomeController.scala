@@ -18,14 +18,23 @@ class HomeController @Inject()(implicit ec: ExecutionContext,
   var at: AnnotatedText = null
   var loadAnnos: String = "f"
 
+  /**
+   * Action to render index page.
+   */
   def index = Action {
     Ok(views.html.index())
   }
 
+  /**
+   * Action to render corpus page.
+   */
   def corpus = Action {
     Ok(views.html.corpus())
   }
 
+  /**
+   * Action to render analyze page.
+   */
   def analyze() = Action { implicit request =>
     val textFormToLoad = textForm
     val loadAnnosToLoad = loadAnnos
@@ -34,6 +43,10 @@ class HomeController @Inject()(implicit ec: ExecutionContext,
     Ok(views.html.analyze(textFormToLoad, loadAnnosToLoad))
   }
 
+  /**
+   * Action to validate user input. Calls annotator and annotatedText action and redirects to analyze page on valid
+   * input. Returns BadRequest on invalid input.
+   */
   def validateTextForm = Action { implicit request =>
     textForm.bindFromRequest.fold(
       formWithErrors => BadRequest(views.html.analyze(formWithErrors, "f")),
@@ -48,10 +61,16 @@ class HomeController @Inject()(implicit ec: ExecutionContext,
     )
   }
 
+  /**
+   * Action that maps annotations to json.
+   */
   def annotatedText() = Action { implicit request =>
     Ok(Json.toJson(at))
   }
 
+  /**
+   * Action that renders info page.
+   */
   def info = Action {
     Ok(views.html.info())
   }

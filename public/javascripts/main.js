@@ -3,6 +3,9 @@ $(window).on('load', function(){
     navbarSelection(title.innerText);
 });
 
+/**
+* Highlights current item on navbar.
+*/
 function navbarSelection(title){
     const navbarItems = document.getElementsByClassName("w3-bar-item");
     for(let i=0; i<navbarItems.length; i++){

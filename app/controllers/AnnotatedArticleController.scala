@@ -25,8 +25,12 @@ class AnnotatedArticleController @Inject()(cc: ControllerComponents,
   implicit def ec: ExecutionContext = cc.executionContext
 
   val collectionName = ConfigFactory.load().getString("mongodb.collection")
+
   def articleCollection: Future[JSONCollection] = database.map(_.collection[JSONCollection](collectionName))
 
+  /**
+   * Action that maps articles from MongoDB to Json.
+   */
   def articleList = Action.async { implicit request =>
 
     val futureArticleList: Future[Seq[AnnotatedArticle]] = articleCollection
@@ -38,6 +42,10 @@ class AnnotatedArticleController @Inject()(cc: ControllerComponents,
     futureArticleList.map { article => Ok(Json.toJson(article)) }
   }
 
+  /**
+   * Action that maps articles from File to Json.
+   * @return
+   */
   def inMemoryArticleList() = Action { implicit request =>
     //only in development mode
     val path = "conf/resources/inMemoryArticles.json"
@@ -53,6 +61,9 @@ class AnnotatedArticleController @Inject()(cc: ControllerComponents,
     )
   }
 
+  /**
+   * Action that defines Javascript routes.
+   */
   def javascriptRoutes = Action { implicit request =>
     Ok(JavaScriptReverseRouter("jsRoutes")
     (routes.javascript.AnnotatedArticleController.articleList,

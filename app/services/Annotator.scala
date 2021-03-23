@@ -12,7 +12,7 @@ import javax.inject._
 trait Annotator {
   /**
    * Annotates given Text according to a PipelineModel.
-   * @param text: Text to annotate
+   * @param text Text to annotate
    * @return an instance of AnnotatedText, containing annotations
    */
   def annotate(text: String): AnnotatedText

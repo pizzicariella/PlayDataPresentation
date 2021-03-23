@@ -8,6 +8,9 @@ const tagColors = {ADJ: "#A1CE5E", ADP: "#FACF63", ADV: "#969A52", AUX: "#FBAF5F
     PART: "#C5AB89", PRON: "#FFB6AD", PROPN: "#00919C", PUNCT: "white", SCONJ: "#CCC1DB",
     VERB: "#F68B69", X: "#C8C9D0"};
 
+/**
+* Removes labels of form that have been automatically created by play.
+*/
 function removeTextLabel(){
     const labelList = document.getElementsByTagName("label");
     labelList[0].remove();
@@ -15,11 +18,17 @@ function removeTextLabel(){
     requiredEl[0].remove();
 }
 
+/**
+* Removes margin from play form.
+*/
 function removeTextAreaMargin(){
     const ddList = document.getElementsByTagName("dd");
     ddList[0].style.marginLeft = "0em";
 }
 
+/**
+* Executes ajax request to get annotations, if @param {String} arg equals "t".
+*/
 function start(arg) {
     return function (){
         removeTextLabel();
@@ -37,6 +46,9 @@ function start(arg) {
     };
 }
 
+/**
+* Creates annotated text from @param {Object} annotated and adds it to page.
+*/
 function annotateText(annotated) {
     const heading = document.getElementById("resultHeading");
     heading.innerText = "Ergebnis";
@@ -45,6 +57,9 @@ function annotateText(annotated) {
     spans.map(span => resultDiv.appendChild(span));
 }
 
+/**
+* Wraps text into spans.
+*/
 function createAnnotatedTextSpans(annotated) {
     const {text, token, posAnnos, lemmas} = annotated;
     let spans = [];
@@ -74,6 +89,9 @@ function createAnnotatedTextSpans(annotated) {
     return spans;
 }
 
+/**
+* Creates mouseover div containing information about @param {String} tag and @param {String} lemma.
+*/
 function showTagInfo(tag, lemma, event) {
 
     if(tagDescriptions[tag] === undefined){
@@ -107,6 +125,9 @@ function showTagInfo(tag, lemma, event) {
     $(tipDiv).css("background-color", color);
 }
 
+/**
+* Hides mouseover div.
+*/
 function hideTagInfo(ev){
     $(document.getElementById("posTagInfoTipDiv")).css("display", "none");
 }

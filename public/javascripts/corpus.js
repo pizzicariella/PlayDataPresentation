@@ -10,6 +10,9 @@ const tagColors = {ADJ: "#A1CE5E", ADP: "#FACF63", ADV: "#969A52", AUX: "#FBAF5F
     PART: "#C5AB89", PRON: "#FFB6AD", PROPN: "#00919C", SCONJ: "#CCC1DB",
     VERB: "#F68B69", X: "#C8C9D0"};
 
+/**
+* Executes ajax request to get news articles. On success inserts articles and adds pagination. Logs error on failure.
+*/
 $(document).ready(function () {
     jsRoutes.controllers.AnnotatedArticleController.articleList().ajax({
         success: function (result){
@@ -46,6 +49,9 @@ $(document).ready(function () {
     });
 });
 
+/**
+* Refreshes pagination.
+*/
 function loadNextPagination(){
     const paginationBar = document.getElementById("paginationBar");
     const paginationChildren = paginationBar.childNodes;
@@ -85,6 +91,9 @@ function loadNextPagination(){
     loadNextPage(parseInt(paginationBar.childNodes[1].innerText)-1);
 }
 
+/**
+* Refreshes pagination.
+*/
 function loadPreviousPagination(){
     const paginationBar = document.getElementById("paginationBar");
     const paginationChildren = paginationBar.childNodes;
@@ -121,6 +130,9 @@ function loadPreviousPagination(){
     loadNextPage(smallestChild-2);
 }
 
+/**
+* Loads page containing 10 articles.
+*/
 function loadNextPage(pageNumber){
     for(let i=0; i<visibleArticles.length; i++){
         const article = document.getElementById(visibleArticles[i]._id["$oid"]);
@@ -143,7 +155,9 @@ function loadNextPage(pageNumber){
     $('html, body').scrollTop(0);
 }
 
-
+/**
+* Shows Annotations for article with id @param {String} articleId.
+*/
 function showPosAnnotations(articleId) {
     const articleInfo = loadedArticles.find(article => article._id["$oid"] === articleId);
     const {text, lemma, pos} = articleInfo
@@ -185,6 +199,9 @@ function showPosAnnotations(articleId) {
     }
 }
 
+/**
+* Shows mouseover div containing information about @param {String} tag and @param {String} lemma.
+*/
 function showTagInfo(tag, lemma, articleId) {
 
     if(tagDescriptions[tag] === undefined){
@@ -220,11 +237,17 @@ function showTagInfo(tag, lemma, articleId) {
     $(tipDiv).css("background-color", color);
 }
 
+/**
+* Hides mouseover div.
+*/
 function hideTagInfo(articleId, ev){
     const currentArticle = document.getElementById(articleId);
     $(currentArticle.querySelector("#posTagInfoTipDiv")).css("display", "none");
 }
 
+/**
+* Creates spans from annotations contained in @param {Object} posAndLemma.
+*/
 const convertPosAnnotationToWordSpan = (posAndLemma, text, articleId) => {
     const {pos, lemma} = posAndLemma;
     const {begin, end, tag} = pos;
@@ -237,6 +260,9 @@ const convertPosAnnotationToWordSpan = (posAndLemma, text, articleId) => {
     return wordSpan;
 }
 
+/**
+* Adds spans with 'empty' label for parts of text that are not classified as tokens.
+*/
 function completeAnnotations(annotations, lemmas, textLength) {
     let completeAnnos = [];
     for(let i=0; i<annotations.length; i++){
@@ -261,6 +287,9 @@ function completeAnnotations(annotations, lemmas, textLength) {
     return completeAnnos;
 }
 
+/**
+* Adds article to page.
+*/
 const insertArticle = (articleInfo) => {
     const {_id, long_url, crawl_time, text, pos_percentage} = articleInfo;
 
@@ -304,6 +333,9 @@ const insertArticle = (articleInfo) => {
     document.getElementById("articleTab").appendChild(article);
 }
 
+/**
+* Creates div containing percentage values for pos annotations contained in @param {Array} posPercentage.
+*/
 function createArticleInformation(posPercentage, article) {
     const list = article.querySelector("#posTagList");
     posPercentage.sort(compareTP);
@@ -337,8 +369,3 @@ function compareTP(tp1, tp2){
         return -1;
     }
 }
-
-
-
-
-
