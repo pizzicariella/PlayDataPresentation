@@ -3,13 +3,16 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
-GET     /                           controllers.HomeController.index
-GET     /corpus                     controllers.HomeController.corpus
-GET     /corpus/articles            controllers.AnnotatedArticleController.articleList
-GET     /corpus/test/articles       controllers.AnnotatedArticleController.inMemoryArticleList
-GET     /analyze                    controllers.HomeController.analyze
+# API
+GET     /api/corpus/articles        controllers.AnnotatedArticleController.articleList
+GET     /api/corpus/test/articles   controllers.AnnotatedArticleController.inMemoryArticleList
 POST    /analyze/text               controllers.HomeController.validateTextForm
 GET     /analyze/annotated          controllers.HomeController.annotatedText
+
+# Views
+GET     /                           controllers.HomeController.index
+GET     /corpus                     controllers.HomeController.corpus
+GET     /analyze                    controllers.HomeController.analyze
 GET     /info                       controllers.HomeController.info
 
 # Javascript routing
