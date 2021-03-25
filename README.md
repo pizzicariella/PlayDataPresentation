@@ -36,7 +36,7 @@ The following endpoints render the views:
 
 Javascript Routes can be configured in `controllers/AnnotatedArticleController` and are accessible on endpoint
 
-'GET /javascriptRoutes'
+`GET /javascriptRoutes`
 
 ## Build
 
