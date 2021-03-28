@@ -36,13 +36,13 @@ The following endpoints render the views:
 
 Javascript Routes can be configured in `controllers/AnnotatedArticleController` and are accessible on endpoint
 
-'GET /javascriptRoutes'
+`GET /javascriptRoutes`
 
 ## Build
 
 Before build an `application.conf` file has to be added in `conf` directory. Here parameters to run the application have to be configured. 
 `play.modules.enabled += "play.modules.reactivemongo.ReactiveMongoModule"` has to be set. Additionally `mongodb.uri` and `mongodb.collection` have to be set to 
-configure access to mongoDB. Furthermore it's necessary to set `play.http.secret.key` and `play.hosts.allowed`. Other parameters can be edited as desired. 
+configure access to mongoDB. Furthermore it's necessary to set `play.http.secret.key` and `play.filters.hosts.allowed`. Other parameters can be edited as desired. 
 
 Executing `sbt dist` in project directory will create `.zip` file in `target/universal` directory. 
 
