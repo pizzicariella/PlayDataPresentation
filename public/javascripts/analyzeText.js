@@ -68,7 +68,10 @@ function createAnnotatedTextSpans(annotated) {
         console.log("length of token and annos dont match");
     }
     for(let i = 0; i<token.length; i++){
-        const indexOfToken = subText.indexOf(token[i]);
+        let indexOfToken = subText.indexOf(token[i]);
+        if(indexOfToken == -1){
+            indexOfToken = 1;
+        }
         if(indexOfToken > 0){
             const wordSpan = document.createElement("span");
             wordSpan.innerText = subText.substr(0, indexOfToken);

@@ -6,8 +6,8 @@
 # API
 GET     /api/corpus/articles        controllers.AnnotatedArticleController.articleList
 GET     /api/corpus/test/articles   controllers.AnnotatedArticleController.inMemoryArticleList
-POST    /analyze/text               controllers.HomeController.validateTextForm
-GET     /analyze/annotated          controllers.HomeController.annotatedText
+POST    /api/analyze/text           controllers.HomeController.validateTextForm
+GET     /api/analyze/annotated      controllers.HomeController.annotatedText
 
 # Views
 GET     /                           controllers.HomeController.index
@@ -19,7 +19,7 @@ GET     /info                       controllers.HomeController.info
 GET     /javascriptRoutes           controllers.AnnotatedArticleController.javascriptRoutes
 
 # Map static resources from the /public folder to the /assets URL path
-#GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
+#GET     /assets/*file              controllers.Assets.versioned(path="/public", file: Asset)
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
 
       
